@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Exit on first failing command.
+set -e
+# Echo commands to console.
+set -x
+
+# Build production site.
+BUNDLE_GEMFILE=Gemfile JEKYLL_ENV=production bundle exec jekyll build
+

@@ -1,0 +1,16 @@
+sudo: false
+language: ruby
+rvm:
+- 2.4.1
+env:
+  global:
+  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+before_install:
+- nvm install 7.10.0
+script:
+- ./_build
+deploy:
+  provider: firebase
+  token:
+    secure: IsxS5GoSxMXaroDc9y8EvsrowIx/zikmWfmQYGt36W5kKtFhv4JNiHF34DVlQ1Nbo+2IRJmwacQLJ3kPRqUZoHPO/qLvjOl+9JIUqiw9RS37ptP1mgxwicekiuaCA62Gjx8O1Gn2gFjmmxLru6jkAv9Zv6P4ye2vJOESDOKLKow1He48luht/W7qAF75evmAhlb6nLzzzGRpo+Sx9i83RAe12xRowrZ9h4O4ksIHkVGtpYKEUngLx8pQe3bRyczLTbX+LoFSM/Rrcw41nNYXh92FyIig+sQDDj7uOC+iVmtwpnKgtYhHIllOZrZRgLfQymnDKwqutigEY4Xvvqmiq3ZYHFCqtKcpoD5N2OvPZXfp8QtZAKOJdJG8unpzZ9QD/KjiIKT1s1mG7g0HGvWum62IS69JL+c/69BnIfb4RDUoTmbgb8uuvfYBvw+go0eTl7d8TJiQK5qfQ0+gTQgt+mfQEjeUMTr/2az/JMlTYVV4D9yA0vy27/JounCgFDw490+TGdYuc1apaIAl+XShBG7QvthvaBMdsM4OW9XiWxolHVAkoarRjRK7e8Cos2Wrp2LrPPzBjZ3zUHuC0lxjLkk1pO8PouEGS+/ceYa9V04o35CZoIljYUZZndRWIqwkiw6s5CSTtON067rab6RJx7EVpHjE0AhDEpdBVo78QiE=
+  skip_cleanup: true
