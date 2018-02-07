@@ -27,7 +27,7 @@ The simple answer is that nobody has tried to find out.
 
 For the first few years of its existence, Sia has struggled with the challenge of building a decentralized storage network that functions at all. It hasn't left them much time to capture performance metrics.
 
-In addition, testing on the production Sia network is expensive. To test, you have to make real payments to storage sellers. 
+In addition, testing on the production Sia network is expensive. To test, you have to make real payments to storage sellers.
 
 Performing a single load test might cost hundreds to thousands of dollars. We don't know exactly how much it will cost, which leads to my next question...
 
@@ -55,7 +55,7 @@ I will perform the test using three independent test cases:
 
 ## Optimal case
 
-In the first test case, I will upload a set of files where each file's size is exactly 125828280 bytes (~120 MiB). 
+In the first test case, I will upload a set of files where each file's size is exactly 125828280 bytes (~120 MiB).
 
 When Sia processes files for upload, it breaks them into "chunks" of 125828280 bytes. Uploading files that match this size exactly should yield optimal storage capacity.
 
