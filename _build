@@ -8,3 +8,10 @@ set -x
 # Build production site.
 BUNDLE_GEMFILE=Gemfile JEKYLL_ENV=production bundle exec jekyll build
 
+# Make sure the Google Analytics token appears in the prod build.
+UA_TOKEN="UA-113710339-1"
+if ! grep "${UA_TOKEN}" _site/ -R; then
+  echo "ERROR: Google Analytics token didn't appear in prod build!";
+  exit 1;
+fi
+
