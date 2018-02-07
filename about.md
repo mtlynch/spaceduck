@@ -5,7 +5,7 @@ permalink: "/about/"
 tags: about
 ---
 
-Space Duck is a blog about decentralized storage. It covers technologies for different technologies in this space, including Sia, Storj, and Filecoin.
+Space Duck is a blog about decentralized storage. It covers different technologies in this space, including [Sia](https://sia.tech), [Storj](https://storj.io/), and [Filecoin](https://filecoin.io/).
 
 This blog focuses on the technical aspects of these technologies and not the trading activity of the associated cryptocurrencies. It will include tutorials, software reviews, and experiments with decentralized storage tools.
 
