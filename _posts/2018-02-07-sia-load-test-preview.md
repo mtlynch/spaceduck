@@ -55,9 +55,9 @@ I will perform the test using three independent test cases:
 
 ## Optimal case
 
-In the first test case, I will upload a set of files where each file's size is exactly 125828280 bytes (~120 MiB).
+In the first test case, I will upload a set of files where each file's size is exactly 41942760 bytes (~40 MiB).
 
-When Sia processes files for upload, it breaks them into "chunks" of 125828280 bytes. Uploading files that match this size exactly should yield optimal storage capacity.
+When Sia processes files for upload, it breaks them into "chunks" of 41942760 bytes. Uploading files that match this size exactly should yield optimal storage capacity.
 
 This test will provide an upper bound on Sia's performance.
 
@@ -65,7 +65,7 @@ This test will provide an upper bound on Sia's performance.
 
 In the second test case, I will upload a set of files where each file's size is exactly 1 byte.
 
-Because Sia uses ~120 MiB data chunks, a file of 1 byte is Sia's worst case. It causes Sia to generate a ~120 MiB chunk where all but 1 byte is unused space.
+Because Sia uses ~40 MiB data chunks, a file of 1 byte is Sia's worst case. It causes Sia to generate a ~40 MiB chunk where all but 1 byte is unused space.
 
 This test will provide a lower bound on Sia's performance.
 
@@ -81,7 +81,7 @@ I will upload these files to Sia to determine performance on real-world data.
 
 The full test plan is available as a PDF below:
 
-[![Sia load test doc cover](/images/sia-load-test-preview/sia-load-test-cover-sm.png)](/files/sia-load-test-preview/load-test-plan-2018-02-07.pdf)
+[![Sia load test doc cover](/images/sia-load-test-preview/sia-load-test-cover-sm.png)](/files/sia-load-test-preview/load-test-plan-2018-02-08.pdf)
 
 The test plan is open to community feedback until Saturday, Feb. 10th at 12pm ET. If you have suggestions or see gaps in the design, feel free to comment below or send me an email at [michael@spaceduck.io](mailto:michael@spaceduck.io).
 
@@ -103,3 +103,7 @@ I will provide everything any interested party needs to perform the same tests. 
 # Funding
 
 The [Sia bounty contributors group](https://blog.sia.tech/announcing-sia-bounties-800daf90398b) has generously funded Sia wallets for use in this test. The group will collect any unused funds at the test's conclusion.
+
+# Acknowledgements
+
+Thanks to Luke Champine, David Vorick, James Muller, Salvador Herrera for their contributions to the test plan.
