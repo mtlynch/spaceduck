@@ -2,6 +2,7 @@
 title: How Much Data Can You Store on Sia?
 layout: post
 date: '2018-02-07'
+last_modified_at: '2018-02-14T14:50:00-05:00'
 summary: A rigorous test of Sia's upload capacity.
 tags:
 - sia
@@ -81,7 +82,7 @@ I will upload these files to Sia to determine performance on real-world data.
 
 The full test plan is available as a PDF below:
 
-[![Sia load test doc cover](/images/sia-load-test-preview/sia-load-test-cover-sm.png)](/files/sia-load-test-preview/load-test-plan-2018-02-08.pdf)
+[![Sia load test doc cover](/images/sia-load-test-preview/sia-load-test-cover-sm.png)](/files/sia-load-test-preview/load-test-plan-2018-02-14.pdf)
 
 The test plan is open to community feedback until Saturday, Feb. 10th at 12pm ET. If you have suggestions or see gaps in the design, feel free to comment below or send me an email at [michael@spaceduck.io](mailto:michael@spaceduck.io).
 
