@@ -90,7 +90,9 @@ When the feedback window closes, I will update this post with the final test pla
 
 # Test Outputs
 
-I aim to publish results by Feb. 16th, 2018.
+I aim to publish results by ~~Feb. 16th,~~ 2018.
+
+**Edit (2018-02-16)**: Tests are taking a bit longer than I predicted. I'm currently about 70% through test one of three. New ETA for full results is Feb. 25th, 2018. See the [metrics collector post](/sia-metrics-collector/) for some initial findings.
 
 To avoid [publication bias](https://en.wikipedia.org/wiki/Publication_bias), I will publish regardless of the outcome, even if results are inconclusive due to measurement error.
 
