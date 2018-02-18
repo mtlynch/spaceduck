@@ -1,7 +1,7 @@
 ---
 title: Sia Finally Published an Official Library but Forgot to Tell Anyone
 layout: post
-date: '2018-02-18 00:00:00'
+date: '2018-02-18'
 summary: A first look at a long-awaited library.
 tags:
 - sia
@@ -143,6 +143,8 @@ Notice also that all options for `Create` are encapsulated in the [`BucketAttrs`
 Sia hasn't made any official announcement about their library yet. I don't know whether the published version is an unsupported alpha release or the official Sia library that they'll commit to supporting for years into the future. Obviously, I hope it's the former.
 
 I'd love to see the Sia team iterate on this library based on feedback from third-party developers. No matter how good you are at designing an API, you can't do it well without talking to the people who are actually using it.
+
+**Update**: Sia developer Luke Champine confirms that this API is [not yet finalized](https://twitter.com/lukechampine/status/965352044788895744).
 
 ## How about an app contest?
 
