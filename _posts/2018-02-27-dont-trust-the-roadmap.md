@@ -99,3 +99,9 @@ It's better to announce a narrow feature set and expand it later than to routine
 **Speak up**
 
 It's easy for the Sia team to ignore the roadmap if people blindly accept it as fact and forget about its track record. If you value an accurate roadmap, let the Sia team know. Give feedback about the product's planned direction, and ask questions when they diverge from it.
+
+## Updates
+
+* **2018-02-27, 6pm ET**: Sia's lead developer has posted a [lengthy response](https://www.reddit.com/r/siacoin/comments/80qcbf/why_you_shouldnt_take_the_sia_roadmap_seriously/duxiuj3/?st=je6lxryn&sh=6149ac36) to this article on reddit.
+* **2018-02-27, 7:30pm ET**: In response to this post, external Sia contributor Thomas Bennett has updated the [public roadmap](https://trello.com/b/Io1dDyuI/sia-public-roadmap) to remove specific dates and trim down the set of features listed under "Short Term."
+
