@@ -32,11 +32,11 @@ The block height is the number of blocks in the blockchain before a particular t
 
 The blockchain is a public ledger, so if I knew the block in which my transaction occurred, I should be able to just look up the timestamp for that block. That's how it works for Bitcoin:
 
-[![Screenshot of Blockchain.info](/images/sia-block-timestamps/blockchain-info.png)](/images/sia-block-timestamps/blockchain-info.png)
+{% include image.html file="blockchain-info.png" alt="Screenshot of Blockchain.info" max_width="601px" img_link="true" %}
 
 So I checked the official Sia blockchain explorer. What did the latest block look like? At the time, that was block [143,159](https://explore.sia.tech/block/143159):
 
-[![Screenshot of Sia Explorer](/images/sia-block-timestamps/sia-explorer.png)](/images/sia-block-timestamps/sia-explorer.png)
+{% include image.html file="sia-explorer.png" alt="Screenshot of Sia Explorer" max_width="820px" img_link="true" %}
 
 Hmm, no timestamp field.
 
@@ -44,13 +44,13 @@ There was a field called "*Maturity* Timestamp." Maybe that was what I wanted.
 
 `1519406327` looked like a UNIX timestamp, so I converted it to a human date:
 
-[![UNIX timestamp converted to human timestamp](/images/sia-block-timestamps/epoch-converted.png)](/images/sia-block-timestamps/epoch-converted.png)
+{% include image.html file="epoch-converted.png" alt="UNIX timestamp converted to human timestamp" max_width="680px" img_link="true" %}
 
 Okay, so it converted to 12:18pm on Feb. 23rd. I was checking at 2:49pm on Feb. 24th. That meant it couldn't be the block timestamp because it would mean Sia had gone 27 hours since finding a new block.
 
 To confirm, I checked [SiaStats](https://siastats.info):
 
-[![SiaStats display for block 143,159](/images/sia-block-timestamps/siastats-143159.png)](/images/sia-block-timestamps/siastats-143159.png)
+{% include image.html file="siastats-143159.png" alt="SiaStats display for block 143,159" max_width="571px" img_link="true" %}
 
 SiaStats said that the last block occurred at 2:23pm, which was a much more believable time.
 
@@ -78,7 +78,7 @@ Wait, SiaStats knew the most recent block time. Maybe SiaStats knew *all* the bl
 
 SiaStats offers a nice collection of [free data APIs](https://siastats.info/api), so I checked those out.
 
-[![SiaStats available APIs](/images/sia-block-timestamps/siastats-apis.png)](/images/sia-block-timestamps/siastats-apis.png)
+{% include image.html file="siastats-apis.png" alt="SiaStats available APIs" max_width="811px" img_link="true" %}
 
 No luck! They have a database of blocks and timestamps, but it only goes back 72 hours.
 
@@ -140,7 +140,7 @@ Difficulty: 6458192917864068561
 
 The Sia command-line client didn't seem to want to tell me about block timestamps. Maybe I'd have to drop down directly into the [Sia REST API](https://github.com/NebulousLabs/Sia/blob/80cb4bdf63ba45227e62613694d553d09e95bc9f/doc/API.md). What did it have to say about block metadata?
 
-[![Sia API documentation](/images/sia-block-timestamps/sia-api-sm.png)](/images/sia-block-timestamps/sia-api.png)
+{% include image.html file="sia-api-sm.png" alt="Sia API documentation" max_width="500px" link_url="/images/2018-02-24-sia-block-timestamps/sia-api.png" %}
 
 No dice! There were only two `/consensus` APIs and they didn't provide historical block timestamps.
 
@@ -194,7 +194,7 @@ Uh oh. Deadlock issues? Issues apparently so bad that the developers aren't even
 
 Maybe it was a recent change so tests are temporarily disabled while they fix it. I checked the [git blame history](https://github.com/NebulousLabs/Sia/blob/c40312c5fc9927c8701c6d12441fd7c97279ccee/node/api/explorer_test.go) to see when the tests were disabled:
 
-[![Github blame layer](/images/sia-block-timestamps/github-blame.png)](/images/sia-block-timestamps/github-blame.png)
+{% include image.html file="github-blame.png" alt="Github blame layer" img_link="true" %}
 
 Two years ago?!?! This code has been sitting in the codebase untested and/or dead for **two years**?
 
@@ -290,7 +290,7 @@ I also published a [gist](https://gist.github.com/mtlynch/8394e0be8d2de7097ab31c
 
 As I was writing this post, I remembered that [SiaHub](https://siahub.info/) runs their own really nice Sia blockchain explorer. They even display the block timestamp:
 
-[![SiaHub screenshot](/images/sia-block-timestamps/siahub.png)](/images/sia-block-timestamps/siahub.png)
+{% include image.html file="siahub.png" alt="SiaHub screenshot" max_width="802px" img_link="true" %}
 
 It gets even better than that. SiaHub also offers a [free, hosted API](https://siahub.readme.io/v1.0/reference#block) so that users don't have to go through the hassle of spinning up their own Sia node with the `explorer` module loaded.
 
@@ -308,7 +308,7 @@ I went so far down the rabbit hole with these block timestamps that I forgot wha
 
 Then a thought occurred to me: doesn't Sia's GUI interface show transaction timestamps in human-readable format?
 
-[![Sia-UI screenshot](/images/sia-block-timestamps/sia-ui.png)](/images/sia-block-timestamps/sia-ui.png)
+{% include image.html file="sia-ui.png" alt="Sia-UI screenshot" img_link="true" %}
 
 It does!
 

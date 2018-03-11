@@ -15,11 +15,11 @@ For the past few weeks, I've seen cryptocurrency bloggers breathlessly tell thei
 
 Here's an excerpt from an article published two days ago:
 
-[![Screenshot of article about Sia 2018Q1 features](/images/dont-trust-the-roadmap/article1.png)](/images/dont-trust-the-roadmap/article1.png)
+{% include image.html file="article1.png" alt="Screenshot of article about Sia 2018Q1 features" max_width="802px" img_link="true" %}
 
 And here's another that was published just yesterday:
 
-[![Screenshot of article about Sia 2018Q1 features](/images/dont-trust-the-roadmap/article2.png)](/images/dont-trust-the-roadmap/article2.png)
+{% include image.html file="article2.png" alt="Screenshot of article about Sia 2018Q1 features" max_width="723px" img_link="true" %}
 
 Is this real? Will Sia challenge BitTorrent and MEGA with a revolutionary new peer-to-peer filesharing solution sometime in the next month?
 
@@ -31,7 +31,7 @@ This information is coming from the [Sia public roadmap](https://trello.com/b/Io
 
 Here's what it looks like today:
 
-[![Sia's public roadmap](/images/dont-trust-the-roadmap/sia-roadmap-2018-02-27.png)](/images/dont-trust-the-roadmap/sia-roadmap-2018-02-27.png)
+{% include image.html file="sia-roadmap-2018-02-27.png" alt="Sia's public roadmap" img_link="true" %}
 
 Okay, so the roadmap supports everything the bloggers claim. But as you might have guessed from the title of this post, the roadmap is the problem.
 
@@ -46,7 +46,7 @@ The new features in 1.3.2 are:
 
 In case you missed it, here's a Venn diagram of the overlap between those features and the features that were announced on the roadmap for Q1:
 
-[![Sia's public roadmap](/images/dont-trust-the-roadmap/venn-diagram-sm.png)](/images/dont-trust-the-roadmap/venn-diagram.png)
+{% include image.html file="venn-diagram.png" alt="Sia's public roadmap" max_width="800px" img_link="true" %}
 
 In other words, the features actually in the 1.3.2 release are completely distinct from the features the roadmap promised (and continues to promise) for Q1.
 

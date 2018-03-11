@@ -32,7 +32,7 @@ This was most apparent during Sia's integration with the Minio file server a few
 
 One of the top findings from the [postmortem](https://mtlynch.io/sia-minio-postmortem/) was that 30-40% of the integration code was just to wrap Sia's REST API.
 
-[![Screenshot from Sia-Minio postmortem](/images/new-sia-library/sia-postmortem-no-library.png)](https://docs.google.com/document/d/1Bupw6vQQCfiv6r28BARsa4kjDWOhowWvDzAQmwLWrY8/edit)
+{% include image.html file="sia-postmortem-no-library.png" alt="Screenshot from Sia-Minio postmortem" link_url="https://docs.google.com/document/d/1Bupw6vQQCfiv6r28BARsa4kjDWOhowWvDzAQmwLWrY8/edit" %}
 
 For Sia to grow, it needs a powerful, intuitive library on which clients can build applications. In fact, it needs *many* libraries so that it can support a broad range of technologies. But a Go library is a good start.
 
