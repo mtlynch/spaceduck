@@ -46,7 +46,7 @@ The new features in 1.3.2 are:
 
 In case you missed it, here's a Venn diagram of the overlap between those features and the features that were announced on the roadmap for Q1:
 
-{% include image.html file="venn-diagram.png" alt="Sia's public roadmap" max_width="800px" img_link="true" %}
+{% include image.html file="venn-diagram.png" alt="Sia's public roadmap" img_link="true" %}
 
 In other words, the features actually in the 1.3.2 release are completely distinct from the features the roadmap promised (and continues to promise) for Q1.
 
