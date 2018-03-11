@@ -23,13 +23,13 @@ Graphs and detailed metrics make it easier to understand Sia's behavior. If all 
 
 I wanted to see a graph of changes over time, like this one:
 
-{% include image.html file="data-uploaded-dev-sm.png" alt="Data uploaded over time" max_width="836px" link_url="/images/2018-02-16-sia-metrics-collector/data-uploaded-dev.png" %}
+{% include image.html file="data-uploaded-dev.png" img_link=true alt="Data uploaded over time" %}
 
 The above graph is from a real trial run of the load test using a 500 SC wallet. You see that Sia uploads data steadily for the first eight hours, then slows down until finally flatlining at ~0.3 TiB of file data uploaded, or ~1 TiB of contract usage (3x file data because of Sia's 3x redundancy).
 
 This is clearer in  the graph of Sia's upload bandwidth:
 
-{% include image.html file="upload-bandwidth-dev-sm.png" alt="Upload bandwidth over time" max_width="836px" link_url="/images/2018-02-16-sia-metrics-collector/upload-bandwidth-dev.png" %}
+{% include image.html file="upload-bandwidth-dev.png" alt="Upload bandwidth over time" img_link=true %}
 
 For eight hours, Sia maintained an impressively high upload bandwidth of ~250 Mbps, but rapidly declined to near zero over the next few hours.
 
@@ -45,11 +45,11 @@ As Sia purchases more contracts, it moves money from your wallet into active con
 
 Here's a graph that shows this on a real test with 5000 SC. The sum of wallet balance and contract spending remains 5000 SC throughout:
 
-{% include image.html file="funds-balance-test1.png" alt="Renter spending over time" max_width="836px" img_link="true" %}
+{% include image.html file="funds-balance-test1.png" alt="Renter spending over time" img_link="true" %}
 
 I tried the same test using a 500 SC wallet and saw drastically different results:
 
-{% include image.html file="funds-balance-dev.png" alt="Renter spending over time" max_width="836px" img_link="true" %}
+{% include image.html file="funds-balance-dev.png" alt="Renter spending over time" img_link="true" %}
 
 My 500 SC wallet balance dwindled down to zero, but I only ended up with 333.33 SC in storage contracts. So where'd the last 166.67 SC go?
 
@@ -72,7 +72,7 @@ If you buy a 33.3 SC storage contract, ~5.5 SC is lost to contract fees. The rem
 
 Sia Metrics Collector tracks all of these metrics over time. Here's a graph of how those costs changed as my Sia node formed 50 contracts of 3.33 SC each, then began uploading data:
 
-{% include image.html file="renter-spending-dev-sm.png" alt="Renter spending over time" max_width="836px" link_url="/images/2018-02-16-sia-metrics-collector/renter-spending-dev.png" %}
+{% include image.html file="renter-spending-dev.png" alt="Renter spending over time" img_link=true %}
 
 You may notice something unexpected about storage spending (the red line). I expected it to strictly increase, but there are several instances around the four-hour mark where it decreases.
 
@@ -82,7 +82,7 @@ This would be like pumping gas for your car and watching your the gas meter go f
 
 The metrics revealed that Sia makes wasteful choices with contract spending. Take another look at the spending graph from above:
 
-{% include image.html file="renter-spending-dev-sm.png" alt="Renter spending over time" max_width="836px" link_url="/images/2018-02-16-sia-metrics-collector/renter-spending-dev.png" %}
+{% include image.html file="renter-spending-dev.png" alt="Renter spending over time" image_link=true %}
 
 I wondered why remaining renter funds (the green line) sometimes increased. That metric should strictly *decrease* as I upload data. Instead, it shows a sawtooth pattern, alternately increasing and decreasing for the first six hours. How could I be gaining funds by uploading data?
 

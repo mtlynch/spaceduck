@@ -36,7 +36,7 @@ The blockchain is a public ledger, so if I knew the block in which my transactio
 
 So I checked the official Sia blockchain explorer. What did the latest block look like? At the time, that was block [143,159](https://explore.sia.tech/block/143159):
 
-{% include image.html file="sia-explorer.png" alt="Screenshot of Sia Explorer" max_width="820px" img_link="true" %}
+{% include image.html file="sia-explorer.png" alt="Screenshot of Sia Explorer" img_link="true" %}
 
 Hmm, no timestamp field.
 
@@ -140,7 +140,7 @@ Difficulty: 6458192917864068561
 
 The Sia command-line client didn't seem to want to tell me about block timestamps. Maybe I'd have to drop down directly into the [Sia REST API](https://github.com/NebulousLabs/Sia/blob/80cb4bdf63ba45227e62613694d553d09e95bc9f/doc/API.md). What did it have to say about block metadata?
 
-{% include image.html file="sia-api-sm.png" alt="Sia API documentation" max_width="500px" link_url="/images/2018-02-24-sia-block-timestamps/sia-api.png" %}
+{% include image.html file="sia-api.png" alt="Sia API documentation" max_width="500px" img_link=true %}
 
 No dice! There were only two `/consensus` APIs and they didn't provide historical block timestamps.
 
@@ -290,7 +290,7 @@ I also published a [gist](https://gist.github.com/mtlynch/8394e0be8d2de7097ab31c
 
 As I was writing this post, I remembered that [SiaHub](https://siahub.info/) runs their own really nice Sia blockchain explorer. They even display the block timestamp:
 
-{% include image.html file="siahub.png" alt="SiaHub screenshot" max_width="802px" img_link="true" %}
+{% include image.html file="siahub.png" alt="SiaHub screenshot" img_link="true" %}
 
 It gets even better than that. SiaHub also offers a [free, hosted API](https://siahub.readme.io/v1.0/reference#block) so that users don't have to go through the hassle of spinning up their own Sia node with the `explorer` module loaded.
 
