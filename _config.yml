@@ -124,8 +124,28 @@ sass:
 plugins:
   - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-responsive-image
 # https://github.com/jekyll/jekyll/issues/2938
 exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+
+# jekyll-responsive-image configurations
+responsive_image:
+  template: _includes/responsive-image.html
+  default_quality: 90
+  sizes:
+    - width: 372
+    - width: 672
+    - width: 756
+    - width: 840
+  base_path: images
+  output_path_format: images/resized/%{dirname}/%{width}/%{basename}
+  save_to_source: false
+media_renditions:
+  article:
+    sizes:
+      - "(max-width: 52em) 672px"
+      - "(max-width: 96em) 840px"
+      - "100vw"

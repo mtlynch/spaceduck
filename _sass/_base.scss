@@ -20,11 +20,21 @@ html, body {
 
 img {
   max-width: 100%;
+  width:100%;
 }
 
 em img {
   max-width: 100%;
   margin-left: 0;
+}
+
+figure {
+  margin: 0 0 1rem;
+
+  figcaption {
+    color: $mid-gray;
+    font-size: $caption;
+  }
 }
 
 body {

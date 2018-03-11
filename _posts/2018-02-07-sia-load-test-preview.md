@@ -40,7 +40,7 @@ The software currently doesn't offer buyers much control or visibility into cost
 
 [SiaStats](https://siastats.info/storage_pricing.html), the excellent Sia metrics monitoring site, generates estimates of storage costs based on available host information:
 
-[![Table of SiaStats storage cost estimates](/images/sia-load-test-preview/siastats-estimates-sm.png)](/images/sia-load-test-preview/siastats-estimates.png)
+{% include image.html file="siastats-estimates-sm.png" alt="Table of SiaStats storage cost estimates" img_link=true max_width="800px" %}
 
 Because these are only estimates, we don't know how accurately they reflect real-world usage.
 
@@ -82,7 +82,7 @@ I will upload these files to Sia to determine performance on real-world data.
 
 The full test plan is available as a PDF below:
 
-[![Sia load test doc cover](/images/sia-load-test-preview/sia-load-test-cover-sm.png)](/files/sia-load-test-preview/load-test-plan-2018-02-14.pdf)
+{% include image.html file="sia-load-test-cover-sm.png" alt="Sia load test doc cover" img_url="/files/sia-load-test-preview/load-test-plan-2018-02-14.pdf" max_width="400px" %}
 
 The test plan is open to community feedback until Saturday, Feb. 10th at 12pm ET. If you have suggestions or see gaps in the design, feel free to comment below or send me an email at [michael@spaceduck.io](mailto:michael@spaceduck.io).
 
