@@ -83,7 +83,7 @@ I will upload these files to Sia to determine performance on real-world data.
 
 The full test plan is available as a PDF below:
 
-{% include image.html file="sia-load-test-cover.png" alt="Sia load test doc cover" img_url="/files/sia-load-test-preview/load-test-plan-2018-02-14.pdf" max_width="400px" %}
+[![Sia load test doc cover](/images/2018-02-07-sia-load-test-preview/sia-load-test-cover.png)](/files/sia-load-test-preview/load-test-plan-2018-02-14.pdf)
 
 The test plan is open to community feedback until Saturday, Feb. 10th at 12pm ET. If you have suggestions or see gaps in the design, feel free to comment below or send me an email at [michael@spaceduck.io](mailto:michael@spaceduck.io).
 
