@@ -6,6 +6,7 @@ last_modified_at: '2018-02-14T14:50:00-05:00'
 summary: A rigorous test of Sia's upload capacity.
 tags:
 - sia
+- load test
 permalink: "/sia-load-test-preview/"
 comments: true
 ---
