@@ -97,6 +97,8 @@ I aim to publish results by ~~Feb. 16th,~~ 2018.
 
 **Edit (2018-02-27)**: The first test is STILL running. I'm regretting not setting a time limit on it, but I'm going to just let the test run until it either drops below 3 Mbps or hits 10 TiB. It's currently uploaded over 38,000 files and uploaded 6.186 TiB to the network.
 
+**Edit (2018-03-16)**: First of three test scenarios is complete. See ["Sia Load Test Result 1: Worst-Case Scenario."](/load-test-1/)
+
 To avoid [publication bias](https://en.wikipedia.org/wiki/Publication_bias), I will publish regardless of the outcome, even if results are inconclusive due to measurement error.
 
 The test outputs will include:
