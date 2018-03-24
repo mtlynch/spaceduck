@@ -3,12 +3,11 @@ title: How Much Data Can You Store on Sia?
 layout: post
 date: '2018-02-07'
 last_modified_at: '2018-02-14T14:50:00-05:00'
-summary: A rigorous test of Sia's upload capacity.
+description: A rigorous test of Sia's upload capacity.
 tags:
 - sia
 - load test
 permalink: "/sia-load-test-preview/"
-comments: true
 ---
 
 Sia's [first blog post of 2018](https://blog.sia.tech/sia-triannual-update-september-december-2017-8afdf9c10325) made it clear that this is the year they hope to achieve enterprise adoption:
@@ -41,7 +40,7 @@ The software currently doesn't offer buyers much control or visibility into cost
 
 [SiaStats](https://siastats.info/storage_pricing.html), the excellent Sia metrics monitoring site, generates estimates of storage costs based on available host information:
 
-{% include image.html file="siastats-estimates.png" alt="Table of SiaStats storage cost estimates" img_link=true max_width="800px" %}
+{% include image.html file="siastats-estimates.png" alt="Table of SiaStats storage cost estimates" img_link=true %}
 
 Because these are only estimates, we don't know how accurately they reflect real-world usage.
 

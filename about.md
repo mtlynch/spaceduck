@@ -2,7 +2,8 @@
 title: About Space Duck
 layout: page
 permalink: "/about/"
-tags: about
+menu: true
+order: 1
 ---
 
 Space Duck is a blog about decentralized storage. It covers different technologies in this space, including [Sia](https://sia.tech), [Storj](https://storj.io/), and [Filecoin](https://filecoin.io/).

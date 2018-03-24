@@ -2,13 +2,12 @@
 title: Automating Sia Setup
 layout: post
 date: '2018-03-08'
-summary: How to make Sia server provisioning less of a headache.
+description: How to make Sia server provisioning less of a headache.
 tags:
 - ansible
 - sia
 - automation
 permalink: "/automating-sia-setup/"
-comments: true
 ---
 
 One of the biggest headaches in using Sia is how long it takes to complete the initial setup. Unfortunately, I can't solve that problem. What I can do is make it less tedious and labor-intensive.

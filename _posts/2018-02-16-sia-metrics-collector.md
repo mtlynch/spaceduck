@@ -2,13 +2,12 @@
 title: Capturing Sia's History with Sia Metrics Collector
 layout: post
 date: '2018-02-16'
-summary: A metrics-capturing tool for Sia testing.
+description: A metrics-capturing tool for Sia testing.
 tags:
 - sia
 - metrics
 - load test
 permalink: "/sia-metrics-collector/"
-comments: true
 ---
 
 When I initially thought of [load testing Sia](/sia-load-test-preview/), I thought I'd just watch Sia through its GUI, Sia-UI. As I started writing the test automation, I realized I wanted more insight into what Sia was doing throughout the test.

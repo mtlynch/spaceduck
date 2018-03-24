@@ -2,12 +2,11 @@
 title: The Surprising Difficulty of Finding a Sia Block Timestamp
 layout: post
 date: '2018-02-24'
-summary: How hard can a simple timestamp be?
+description: How hard can a simple timestamp be?
 tags:
 - sia
 - timestamps
 permalink: "/sia-block-timestamps/"
-comments: true
 ---
 
 As I was gathering my cryptocurrency records for what promises to be an exciting tax season, I stumbled upon a Sia task that I never expected to be hard: finding a Sia block's timestamp.
@@ -78,7 +77,7 @@ Wait, SiaStats knew the most recent block time. Maybe SiaStats knew *all* the bl
 
 SiaStats offers a nice collection of [free data APIs](https://siastats.info/api), so I checked those out.
 
-{% include image.html file="siastats-apis.png" alt="SiaStats available APIs" max_width="811px" img_link="true" %}
+{% include image.html file="siastats-apis.png" alt="SiaStats available APIs" img_link="true" %}
 
 No luck! They have a database of blocks and timestamps, but it only goes back 72 hours.
 
