@@ -57,7 +57,7 @@
 {% if link_url %}
   {% assign img_url = link_url %}
 {% elsif img_link %}
-  {% assign img_url = site.url | append: "/" | append: original.path %}
+  {% assign img_url = site.baseurl | append: "/" | append: original.path %}
 {% endif %}
 
 {% if fig_caption %}

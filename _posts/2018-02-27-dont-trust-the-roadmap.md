@@ -2,24 +2,23 @@
 title: Why You Shouldn't Take the Sia Roadmap Seriously
 layout: post
 date: '2018-02-27'
-summary: If you're expecting any of the 2018 Q1 features to happen, I have bad news
+description: If you're expecting any of the 2018 Q1 features to happen, I have bad news
   for you.
 tags:
 - sia
 - timestamps
 permalink: "/dont-trust-the-roadmap/"
-comments: true
 ---
 
 For the past few weeks, I've seen cryptocurrency bloggers breathlessly tell their readers about all the exciting things Sia will do in the first quarter of 2018.
 
 Here's an excerpt from an article published two days ago:
 
-{% include image.html file="article1.png" alt="Screenshot of article about Sia 2018Q1 features" max_width="802px" img_link="true" %}
+{% include image.html file="article1.png" alt="Screenshot of article about Sia 2018Q1 features" img_link="true" %}
 
 And here's another that was published just yesterday:
 
-{% include image.html file="article2.png" alt="Screenshot of article about Sia 2018Q1 features" max_width="723px" img_link="true" %}
+{% include image.html file="article2.png" alt="Screenshot of article about Sia 2018Q1 features" img_link="true" %}
 
 Is this real? Will Sia challenge BitTorrent and MEGA with a revolutionary new peer-to-peer filesharing solution sometime in the next month?
 
