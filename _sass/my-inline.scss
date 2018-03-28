@@ -1,1 +1,12 @@
 // Includes inline theme overrides
+
+/* Custom Image Styles */
+.content figure img {
+  margin-bottom: .25rem;
+}
+
+figcaption {
+  margin-bottom: 1rem;
+  color: #898c8f;
+  font-size: .75rem;
+}
