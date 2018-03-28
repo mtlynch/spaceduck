@@ -258,9 +258,9 @@ kramdown:
 compress_html:
   comments:            ["<!-- ", " -->"]
   clippings:           all
-  endings:             all
-  ignore:
-    envs:              [development]
+  endings:             ""
+ # ignore:
+ #   envs:              [development]
 
 sass:
   style:               compressed
