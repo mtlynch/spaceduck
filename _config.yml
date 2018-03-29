@@ -259,8 +259,6 @@ compress_html:
   comments:            ["<!-- ", " -->"]
   clippings:           all
   endings:             ""
- # ignore:
- #   envs:              [development]
 
 sass:
   style:               compressed
