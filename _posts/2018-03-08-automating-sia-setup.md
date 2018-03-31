@@ -146,7 +146,7 @@ This example installs Sia on a remote machine and initializes its wallet using a
 
 To specify the remote machine and seed, create a file called `hosts` with the following contents:
 
-```
+```text
 sia-from-seed ansible_ssh_host=1.2.3.4 sia_seed="thorn amnesty erase framed technical vampire cell hive sugar silk network soil athlete butter myth viewpoint womanly software rover village yellow ticket reruns cadets wrist sensible apricot theatrics across"
 ```
 
@@ -179,7 +179,7 @@ This example installs Sia on a remote machine and uses the [bootstrap method](ht
 
 To specify the remote machine, create a file called `hosts` with the following contents:
 
-```
+```text
 sia-bootstrapped ansible_ssh_host=1.2.3.4
 ```
 
@@ -217,7 +217,7 @@ This example installs Sia on multiple remote machines, allowing you to run comma
 
 To specify the remote machines, create a file called `hosts` with the following contents:
 
-```
+```text
 sia-multiple-a ansible_ssh_host=1.2.3.4
 sia-multiple-b ansible_ssh_host=1.2.3.5
 sia-multiple-c ansible_ssh_host=1.2.3.6

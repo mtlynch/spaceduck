@@ -15,7 +15,7 @@ As I was gathering my cryptocurrency records for what promises to be an exciting
 
 My journey began as I used the Sia command-line client to print transactions from my main wallet. Its output looks like this:
 
-```
+```bash
 $ ./siac wallet transactions
     [height]                                                   [transaction id]    [net siacoins]   [net siafunds]
       140607   9a23f03a15e88b2f260bb260c910218049a163235dbea25c9266c85dc320d579        5000.00 SC             0 SF
@@ -64,7 +64,7 @@ BlockFacts struct {
   EstimatedHashrate types.Currency    `json:"estimatedhashrate"`
   Height            types.BlockHeight `json:"height"`
   MaturityTimestamp types.Timestamp   `json:"maturitytimestamp"`
-	...
+  ...
 ```
 
 That wasn't helpful. It was just an undocumented field.
@@ -105,7 +105,7 @@ Okay, that told me Sia tracked block timestamps, but I still needed a way to acc
 
 I checked what was available from the Sia command-line client:
 
-```
+```text
 $ ./siac help
 ...
 Available Commands:
@@ -126,7 +126,7 @@ Available Commands:
 
 The only command that was promising was `consensus`, but that just gave me the latest block:
 
-```
+```bash
 $ ./siac consensus
 Synced: Yes
 Block:      00000000000000000b09a3000e97017e005c4e0646f1eeee508b2527ad292605
@@ -151,7 +151,7 @@ If the code is live, but the API documentation doesn't cover it, that means it's
 
 If there was a REST API for this, I expected it to start with `/explorer` because all of the other REST endpoints begin with their associated module name. I checked the source code for that particular string:
 
-```
+```bash
 $ grep "/explorer" ./ -R
 Binary file ./.git/index matches
 ./node/api/explorer.go: // /explorer.
@@ -211,7 +211,7 @@ That REST call probably retrieved block `0`, so I should be able to swap the zer
 
 Sia doesn't load the `explorer` module by default, so I checked the help string to figure out how to load it:
 
-```
+```bash
 $ ./siad modules
 Use the -M or --modules flag to only run specific modules. Modules are
 independent components of Sia. This flag should only be used by developers or
@@ -236,7 +236,7 @@ Explorer (e):
 
 That seemed easy enough. I ran the command it gave me:
 
-```
+```bash
 $ ./siad -M gce
 Sia Daemon v1.3.1
 Loading...
@@ -249,14 +249,14 @@ Finished loading in 0.037083713 seconds
 
 Alright, now the test. Sia was still syncing the blockchain, so I checked to see if I could get information about an early block:
 
-```
+```bash
 $ curl http://localhost:9980/explorer/blocks/10
 {"message":"Browser access disabled due to security vulnerability. Use Sia-UI or siac."}
 ```
 
 Oh right. Sia won't accept HTTP requests unless the caller sets `Sia-Agent` as the HTTP:
 
-```
+```bash
 $ curl -A "Sia-Agent" http://localhost:9980/explorer/blocks/10
 {"block":{"minerpayoutids":["da68362fc0addb2c86e6ea249684f87c25bc191029796843edc1203930bb40a5"],"transactions":[{"id":"66f1e1eda06d0f1c4ba876e693093543301ea95113cade9ab8766f28f82c7216","height":10,"parent":"000000001f39e768ce4ec3b32db9b664503a8bc9f2dd1c67bc90a0ae1871ce7a","rawtransaction":{"siacoininputs":[],"siacoinoutputs":[],"filecontracts":[],"filecontractrevisions":[],"storageproofs":[],"siafundinputs":[],"siafundoutputs":[],"minerfees":[],"arbitrarydata":["Tm9uU2lhUZcUfUTm6JuaL8JVR8ct3A=="],"transactionsignatures":[]},"siacoininputoutputs":null,"siacoinoutputids":null,"filecontractids":null,"filecontractvalidproofoutputids":null,"filecontractmissedproofoutputids":null,"filecontractrevisionvalidproofoutputids":null,"filecontractrevisionmissedproofoutputids":null,"storageproofoutputids":null,"storageproofoutputs":null,"siafundinputoutputs":null,"siafundoutputids":null,"siafundclaimoutputids":null}],"rawblock":{"parentid":"00000000014aca60206632a39de3b54e2110cc25a07b712704a911aafd02952e","nonce":[22,36,0,0,0,0,11,22],"timestamp":1433630907,"minerpayouts":[{"value":"299990000000000000000000000000","unlockhash":"138400c5710172b1de804321cb0827245a7f441602df19ba2ad6b628d5237a26f40008f9d392"}],"transactions":[{"siacoininputs":[],"siacoinoutputs":[],"filecontracts":[],"filecontractrevisions":[],"storageproofs":[],"siafundinputs":[],"siafundoutputs":[],"minerfees":[],"arbitrarydata":["Tm9uU2lhUZcUfUTm6JuaL8JVR8ct3A=="],"transactionsignatures":[]}]},"blockid":"000000001f39e768ce4ec3b32db9b664503a8bc9f2dd1c67bc90a0ae1871ce7a","difficulty":"34359738367","estimatedhashrate":"0","height":10,"maturitytimestamp":0,"target":[0,0,0,0,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"totalcoins":"3299945000000000000000000000000","minerpayoutcount":10,"transactioncount":11,"siacoininputcount":0,"siacoinoutputcount":0,"filecontractcount":0,"filecontractrevisioncount":0,"storageproofcount":0,"siafundinputcount":0,"siafundoutputcount":47,"minerfeecount":0,"arbitrarydatacount":10,"transactionsignaturecount":0,"activecontractcost":"0","activecontractcount":0,"activecontractsize":"0","totalcontractcost":"0","totalcontractsize":"0","totalrevisionvolume":"0"}}
 ```
@@ -271,7 +271,7 @@ I didn't want to keep dealing with `curl` calls and giant JSON dumps. I just wan
 
 I wrote a quick tool called [Sia Timestamp Dumper](https://github.com/mtlynch/sia_timestamp_dumper) to do exactly that. If you have a Sia node running with the `explorer` module enabled, you can use the tool to dump out all the block timestamps as tab-separated values:
 
-```
+```bash
 $ python dump.py
 block_height    unix_timestamp  iso_timestamp
      0  1433600000      2015-06-06T14:13:20Z
@@ -295,7 +295,7 @@ It gets even better than that. SiaHub also offers a [free, hosted API](https://s
 
 It's a different API syntax, but you can get the timestamp nonetheless:
 
-```
+```bash
 $ HEIGHT=143159
 $ curl -s "https://explorer.siahub.info/api/block/${HEIGHT}" 2>&1 | python -c "import datetime, json, sys; print datetime.datetime.fromtimestamp(json.load(sys.stdin)['blockheader']['timestamp'])"
 2018-02-24 14:23:44
@@ -344,7 +344,7 @@ ProcessedTransaction struct {
   TransactionID         types.TransactionID `json:"transactionid"`
   ConfirmationHeight    types.BlockHeight   `json:"confirmationheight"`
   ConfirmationTimestamp types.Timestamp     `json:"confirmationtimestamp"`
-	...
+  ...
 ```
 
 Well look at that! The timestamps for my transactions were there all along. The Sia command-line client just wasn't showing it to me.
@@ -355,7 +355,7 @@ It seemed like information the user *should* know. Further, there shouldn't be a
 
 I submitted a [pull request](https://github.com/NebulousLabs/Sia/pull/2791) to add this functionality, and Luke Champine, Sia's CTO, quickly accepted it. In Sia 1.3.2 and onward, when you query the Sia command-line client for transactions, you'll see the timestamp right there alongside the block height:
 
-```
+```bash
 $ ./siac wallet transactions
              [timestamp]    [height]                                                   [transaction id]    [net siacoins]   [net siafunds]
 2018-02-06 14:00:20-0500      140607   9a23f03a15e88b2f260bb260c910218049a163235dbea25c9266c85dc320d579        5000.00 SC             0 SF

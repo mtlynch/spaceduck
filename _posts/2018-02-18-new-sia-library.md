@@ -65,12 +65,12 @@ func printSiacoinBalance(c *client.Client) {
     return
   }
   fmt.Printf("Siacoin balance: %s\n",
-	     wg.ConfirmedSiacoinBalance.HumanString())
+       wg.ConfirmedSiacoinBalance.HumanString())
 }
 
 func main() {
   a := flag.String("address", "localhost:9980",
-	           "Address and port of Sia node (e.g., sia-server:9980)")
+             "Address and port of Sia node (e.g., sia-server:9980)")
   flag.Parse()
   c := client.New(*a)
   printHeight(c)

@@ -182,7 +182,7 @@ exclude:
   - package.json
   - package-lock.json
 include:
-  - LICENSE.md
+  - _pages
 
 
 # Plugins and Plugin Configuration
