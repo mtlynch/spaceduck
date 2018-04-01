@@ -63,9 +63,9 @@ I noticed odd behavior with Sia's accounting when I examined its spending metric
 * Storage spending
   * The amount you pay to the host to keep your files for the contract period
 * Upload/download spending
-  *  The amount you pay the host for bandwidth every time you upload or download data
+  * The amount you pay the host for bandwidth every time you upload or download data
 * Contract fees
-  *  Frictional cost of creating storage contracts, including fees you pay to hosts, miners, and Siafund holders
+  * Frictional cost of creating storage contracts, including fees you pay to hosts, miners, and Siafund holders
 
 If you buy a 33.3 SC storage contract, ~5.5 SC is lost to contract fees. The remaining 27.8 SC is what Sia calls "remaining renter funds." As you perform actions on Sia, such as uploading or downloading data, Sia uses your remaining renter funds to pay the storage and bandwidth fees associated with those actions.
 
@@ -99,13 +99,13 @@ That's weird. Contract spending increased several times by 3.33 SC (the cost of 
 
 My test script dumps the state of the `/renter/contracts` API at the end of the test, so I decided to check the output:
 
-```
+```bash
 $ grep totalcost 2018-02-14T185827Z-contracts.json
             "totalcost": "3333333333333333333333333",
             "totalcost": "6666666666666666666666666",
             "totalcost": "6666666666666666666666666",
             "totalcost": "3333333333333333333333333",
-						...
+            ...
 ```
 
 Yep. Sia *did* expand a bunch of its contracts. Many still had the original 3.33 SC, but Sia had increased the value of many contracts, some to as much as 13.33 SC.
