@@ -17,8 +17,7 @@ else
 fi
 
 # Development build to prep for HTMLProofer
-BUNDLE_GEMFILE=Gemfile bundle exec jekyll serve -B
-pkill -f jekyll
+BUNDLE_GEMFILE=Gemfile bundle exec jekyll serve --detach && pkill -f jekyll
 
 # Run HTMLProofer
 bundle exec htmlproofer ./_site \
