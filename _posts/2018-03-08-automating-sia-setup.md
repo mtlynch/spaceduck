@@ -284,7 +284,7 @@ This video shows the multiple-node scenario example above:
 
 You probably don't want to watch 10 hours of console output, so the video below skips ahead to the point where the Ansible playbook completes. The user hasn't had to interact with the installation at all since the initial launch of the playbook. When it's complete, each node has the blockchain synced and the wallet initialized:
 
-<script src="https://asciinema.org/a/Bp4oOefN6TEdbDGOZiprml2V9.js" id="asciicast-Bp4oOefN6TEdbDGOZiprml2V9" data-t="630m30s" data-size="large" data-speed="1.6" async></script>
+<script src="https://asciinema.org/a/Bp4oOefN6TEdbDGOZiprml2V9.js" id="asciicast-Bp4oOefN6TEdbDGOZiprml2V9-skip" data-t="630m30s" data-size="large" data-speed="1.6" async></script>
 
 ## Support
 

@@ -8,8 +8,30 @@ set -x
 # Execute Markdown Linter
 mdl _posts _pages --style _linter/markdown-linter-style.rb
 
+# Skips validation checks that take a long time
+htmlproofer_args_extra=""
+if [ "$1" = "--quick" ]; then
+  htmlproofer_args_extra="--disable-external"
+else
+  htmlproofer_args_extra="--check-external-hash"
+fi
+
+# Development build to prep for HTMLProofer
+BUNDLE_GEMFILE=Gemfile bundle exec jekyll build
+
+# Run HTMLProofer
+bundle exec htmlproofer ./_site \
+  --only-4xx \
+  --check-favicon \
+  --check-html \
+  --check-opengraph \
+  --allow-hash-href \
+  --empty-alt-ignore \
+  "$htmlproofer_args_extra"
+
 # Build production site.
-BUNDLE_GEMFILE=Gemfile JEKYLL_ENV=production bundle exec jekyll build
+BUNDLE_GEMFILE=Gemfile JEKYLL_ENV=production bundle exec jekyll build \
+  --config _config.yml,_config_prod.yml
 
 # Make sure the Google Analytics token appears in the prod build.
 UA_TOKEN="UA-113710339-1"
