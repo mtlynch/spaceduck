@@ -73,45 +73,28 @@ Here are some examples of what you can do with ansible-role-storj:
 I'll start with a simple example. The commands below install Storj on the same machine from which you're running Ansible:
 
 ```bash
+# Replace with your own Storj ERC20 address
+PAYMENT_ADDRESS="0x161441Efd42171687dd1468A9e23E74226541c38"
+
+EXTERNAL_IP="$(curl -s http://whatismyip.akamai.com/)"
+
 # Create a minimal Ansible playbook to install Storj
 echo "---
 - hosts: localhost
+  vars:
+    storj_farmer_configs:
+      - payment_address: \"$PAYMENT_ADDRESS\"
+        rpc_address: $EXTERNAL_IP
+        rpc_port: 6000
+        share_size: 1GB
   roles:
     - { role: mtlynch.storj }" > install.yml
 
 # Run the playbook locally.
-sudo ansible-playbook install.yml \
-  --extra-vars "storj_seed_path=${HOME}/storj-test-seed.txt"
+sudo ansible-playbook install.yml
 ```
 
-When the playbook completes,  `storjc` shows that the blockchain is fully synced and the wallet is unlocked:
-
-```bash
-$ /opt/storj/storjc
-Synced: Yes
-Block:      0000000000000001d79e02d419bf6ca7e697d1da530ac5ccb1d9b10fed5476a5
-Height:     144762
-Target:     [0 0 0 0 0 0 0 2 210 195 198 72 223 120 244 201 173 147 250 219 3 100 49 96 250 234 2 3 167 103 231 151]
-Difficulty: 6533753230067179529
-
-$ /opt/storj/storjc wallet
-Wallet status:
-Encrypted, Unlocked
-Confirmed Balance:   0 H
-Unconfirmed Delta:  +0 H
-Exact:               0 H
-Storjfunds:            0 SF
-Storjfund Claims:      0 H
-
-Estimated Fee:       30 mS / KB
-```
-
-The seed is saved in the path specified by the `storj_seed_path` parameter above:
-
-```bash
-$ cat ~/storj-test-seed.txt
-localhost: rims chlorine obtains dauntless value ammo jury liar sayings fossil uncle shelter lids germs vipers estate firm karate limits thumbs pager sixteen phrases potato vegan cajun laboratory radar actress
-```
+<script src="https://asciinema.org/a/kJUsn58UlB8JfimuCWnTa1n9X.js" id="asciicast-kJUsn58UlB8JfimuCWnTa1n9X" async></script>
 
 ### Example 2: Set up multiple Storj farmers on a remote machine
 
@@ -120,7 +103,7 @@ This example installs Storj on a remote machine and initializes its wallet using
 To specify the remote machine and seed, create a file called `hosts` with the following contents:
 
 ```text
-storj-from-seed ansible_ssh_host=1.2.3.4 storj_seed="thorn amnesty erase framed technical vampire cell hive sugar silk network soil athlete butter myth viewpoint womanly software rover village yellow ticket reruns cadets wrist sensible apricot theatrics across"
+storj-from-seed ansible_ssh_host=1.2.3.4"
 ```
 
 Replace `1.2.3.4` with the IP address of your remote host, and replace the 29-word seed passphrase with your own seed. `storj-from-seed` is simply the display name for the host, so you can change this to any name you want.
