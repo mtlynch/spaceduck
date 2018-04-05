@@ -41,7 +41,7 @@ Before running my benchmarks I was under the impression that applying the blocks
 ## Updating subscribers
 When Sia downloads a new block the consensus module advertises that change to its “subscribers”.  Different Sia modules can “subscribe” to each other to stay up to date, for example, the wallet module “subscribes” to the consensus module and can stay up to date with transactions.  Updating subscribers is not strictly required when doing the initial blockchain sync, and it takes a lot of processing power and time.  In my tests updating subscribers took an average of 55 minutes or 19.06% of the time.  I have not identified exactly why updating subscribers takes so long, but in every case, it took at least 17 seconds per 1000 blocks.
 
-## Everything Else
+## Everything else
 31 minutes or 10.57% of the time was spent doing other tasks that my tests did not specifically benchmark.  This includes tasks such as validating the headers, error checking, moving between functions in the code, logging, etc.  While 10.57% is a significant portion of the time, it accounts for thousands of lines of code, and as far as I can tell most of this cannot be avoided or easily optimized.
 
 ## Timing the synchronization
@@ -60,7 +60,7 @@ The numbers used for my results were averages from 3 control tests.  These contr
 
 For full test results and timestamps, please check out my [Google Spreadsheet](https://docs.google.com/spreadsheets/d/1p2VojXu4NXIwKQ-QbPdZq8JprvL_lOZpRG5hrbFDhKw/edit?usp=sharing).
 
-### My Test Environment
+### My test environment
 * OS: Ubuntu 16.04 LXC Container
 * CPU: Intel Xeon D-1521 @ 2.4GHz
 * RAM: 4GB
