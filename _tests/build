@@ -35,8 +35,13 @@ BUNDLE_GEMFILE=Gemfile JEKYLL_ENV=production bundle exec jekyll build \
 
 # Make sure the Google Analytics token appears in the prod build.
 UA_TOKEN="UA-113710339-1"
-if ! grep "${UA_TOKEN}" _site/ -R; then
+if ! grep "${UA_TOKEN}" _site/ -o -R; then
   echo "ERROR: Google Analytics token didn't appear in prod build!";
   exit 1;
 fi
 
+# Make sure large twitter cards are being generated.
+if ! egrep "\"twitter:card.*summary_large_image\"" _site/ -o -R; then
+  echo "ERROR: Large Twitter cards didn't appear in prod build!";
+  exit 1;
+fi
