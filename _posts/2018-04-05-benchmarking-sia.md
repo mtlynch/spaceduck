@@ -8,6 +8,7 @@ tags:
 - sia
 - benchmark
 permalink: "/sia-blockchain-sync/"
+image: "/images/2018-04-05-benchmarking-sia/default-configuration-pie.png"
 ---
 
 *This is a guest post by Sia community contributor [Thomas Bennett](https://github.com/tbenz9).*
