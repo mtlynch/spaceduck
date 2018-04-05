@@ -22,7 +22,7 @@ Download block > validate block header and metadata > validate every transaction
 
 Blocks get downloaded in batches of 10, but every transaction in every block has to be processed and validated in sequential order because transactions may depend on each other.  I was frustrated with how long the initial sync took so I started to do some rough benchmarking and made some interesting discoveries.
 
-{% include image.html file="default-configuration-pie.png" alt="time-spent-on-each-task-pie-chart" fig_caption="% time spent on each task" img_link="true" %}
+{% include image.html file="default-configuration-pie.png" alt="time-spent-on-each-task-pie-chart" fig_caption="Percent time spent on each task" img_link="true" %}
 
 ## Downloading blocks
 My benchmarking revealed that with default Sia settings it took an average of 167 minutes to download the blocks, that’s 54.91% of the average 309 minutes it took to sync from block 0 to block 146,000.  Assuming 10GB of blocks are downloaded that’s an average of 7.98Mb/s throughput.  I believe the download portion takes so long for a variety of reasons.
