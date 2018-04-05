@@ -2,7 +2,7 @@
 title: Benchmarking Sia's Blockchain Sync
 comments: true
 layout: post
-date: "2018-04-06"
+date: "2018-04-05"
 description: "An investigation into the bottlenecks of Sia's blockchain sync and how to eliminate them."
 tags:
 - sia
