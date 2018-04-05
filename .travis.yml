@@ -1,14 +1,8 @@
-sudo: false
-language: ruby
-rvm:
-- 2.4.1
-env:
-  global:
-  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
-before_install:
-- nvm install 7.10.0
-script:
-- ./_build
+sudo: required
+services:
+  - docker
+dist: trusty
+script: _tests/docker_build
 deploy:
   provider: firebase
   token:
