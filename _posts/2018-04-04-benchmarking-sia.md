@@ -1,3 +1,14 @@
+---
+title: Benchmarking Sia's initial synchronization time
+layout: post
+date: "2018-04-04"
+description: Benchmarking Sia's initial synchronization time
+tags:
+- sia
+- benchmark
+permalink: "/sia-blockchain-sync/"
+---
+
 Synchronizing the Sia blockchain takes a long time and is required for using the Sia wallet, hosting, or renting space on the Sia network.  I was frustrated with how long the initial sync was taking so I decided to look into what Sia was doing during that time, and what I can do to reduce initial sync time.
 
 ## The Blockchain is big and getting bigger
@@ -6,7 +17,9 @@ Every Siacoin, Siafund, smart contract, and storage proof transaction is stored 
 {% include image.html file="total-transactions.png" alt="total transactions graph" fig_caption="Total historic Sia blockchain transactions" img_link="true" %}
 
 When you perform the initial sync Sia downloads every block (over 146,000 at time of writing) from its peers and adds them to the local consensus.db file.  Before adding it to your consensus.db file Sia performs a variety of actions on every block.  The workflow looks something like this:
+
 Download block > validate block header and metadata > validate every transaction in block > apply every transaction to consensus.db > update Sia subscribers > repeat 146,000+ times
+
 Blocks get downloaded in batches of 10, but every transaction in every block has to be processed and validated in sequential order because transactions may depend on each other.  I was frustrated with how long the initial sync took so I started to do some rough benchmarking and made some interesting discoveries.
 
 {% include image.html file="default-configuration-pie.png" alt="time-spent-on-each-task-pie-chart" fig_caption="% time spent on each task" img_link="true" %}
