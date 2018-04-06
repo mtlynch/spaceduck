@@ -12,25 +12,26 @@ tags:
 permalink: "/automating-storj-setup/"
 ---
 
-## Why automate Storj?
+I recently tried running Storj and was quickly confused. The [Github repo](https://github.com/Storj/storjshare-daemon) includes instructions for installing Storj on the command-line, but it never explains how to actually *run* it.
 
-I ran a very early version of Storj in mid-2015 and haven't used it much since. I realized that though this is a blog about about decentralized storage in general, I've focused all of my attention on Sia, so it was time to reacquaint myself with Storj.
+I found the [official step-by-step guide](https://docs.storj.io/docs/storj-share-daemon-cli) and was horrified to discover that it's an absurdly convoluted 9300+ word treatise covering a million different scenarios that are irrelevant to 98% of readers.
 
-I tried actually running Storj and was quickly confused. The Github repo for the command-line interface has instructions for installing Storj on the command-line, but it never explains how to actually 
+Think I'm exaggerating? The *command-line* guide shows seven screenshots explaining how to install a graphical text editor:
 
-The step-by-step guide for setting up the Storj command-line server is over 9300 words! It's so bloated with information that it shows seven screenshots to explain to the reader how to install a graphical text editor:
+{% include image.html file="storj-documentation.png" alt="Screenshot of Storj documentation" fig_caption="Excerpt from Storj's command-line guide" max_width="600px" img_link="true" %}
 
-TODO: Screenshot of that part
+Apparently, the guide is aimed at the rare user who's comfortable enough on the command-line to eschew the Storj GUI client but is also so clueless that they don't know how to install or use a text editor.
 
-Apparently that guide was aimed at the rare user who's comfortable enough on the command line to eschew the Storj GUI client, but is also so clueless that they don't know how to install or use a text editor.
+## Simplifying installation
 
-## Automated provisioning
+Why does running Storj have to be so complicated that it requires a 9300-word guide? As the user, what do you really need to tell Storj to get going? A pretty small set of information:
 
-As a Storj user, what do you actually want here?
+* Your Storj payment address
+* How much storage you're willing to share
+* Where to put the data
+* Which port to listen on
 
-What if, instead of constantly checking on the install to move it forward, you could just define the final state you wanted?
-
-Now, you can! I present to you: [ansible-role-storj](https://github.com/mtlynch/ansible-role-storj).
+So I wrote a tool that lets you specify *just* that information and spin up a Storj farmer node. It's called [ansible-role-storj](https://github.com/mtlynch/ansible-role-storj).
 
 ## What is Ansible?
 
@@ -48,7 +49,9 @@ sudo apt-get update \
 
 ## The Ansible Storj role
 
-In Ansible terms, a "role" is essentially a template for installing an application. The Storj role automates all of the following:
+In Ansible terms, a "role" is essentially a template for installing an application.
+
+The Storj role automates all of the following:
 
 * Installing all of Storj's dependencies
 * Version upgrades/downgrades
@@ -98,7 +101,7 @@ echo "---
 sudo ansible-playbook install.yml
 ```
 
-The video below demonstrates these commands running within a real Google Compute Engine server:
+The video below demonstrates these commands running on a Google Compute Engine server:
 
 <script src="https://asciinema.org/a/HN4J3oqKURIXueHqSmmuuAs3H.js" id="asciicast-HN4J3oqKURIXueHqSmmuuAs3H" async></script>
 
@@ -158,29 +161,29 @@ storj-server | SUCCESS | rc=0 >>
 └─────────────────────────────────────────────┴─────────┴──────────┴──────────┴─────────┴───────────────┴─────────┴──────────┴───────────┴──────────────┘
 ```
 
-The video below demonstrates these commands running against a real Google Compute Engine server:
+The video below demonstrates these commands running against a bare Ubuntu 16.04 server on Google Compute Engine:
 
 <script src="https://asciinema.org/a/IuSde3JEpeu00kff68L8AujYv.js" id="asciicast-IuSde3JEpeu00kff68L8AujYv" async></script>
 
 ## A brief rant on Storj
 
-Storj is really unfriendly to automation. While writing this Ansible role, I got the strong sense that the Storj developers put most of their effort into the GUI.
+Storj is really unfriendly to automation. While writing this Ansible role, I got the strong sense that the Storj developers put most of their effort into the GUI and didn't pay much attention to command-line scenarios.
+
+Here are some examples:
 
 **[Storj doesn't set the exit code on failure](https://github.com/Storj/storjshare-daemon/issues/335)**
 
 Most Linux applications set a failing exit code when they exit due to error. Storj doesn't, so I can't tell whether a command succeeded unless I parse Storj's output.
 
-And even then, Storj sometimes reports "failure" for things that I as the developer wouldn't consider failure, such as `failed to start farmer: node is already running`. Is that *really* a failure, Storj? To me, that's success with a warning.
-
-But then you're still stuck because Storj doesn't print "fail" in the output for every failure, like with this error message for invalid syntax:
+But then I'm still stuck because Storj doesn't print "fail" in the output for every failure, like with this error message for invalid syntax:
 
 ```
 no payment address was given, try --help
 ```
 
-So that means that to determine whether a command succeeded or failed, you have to know every possible error message Storj can produce.
+So that means that to determine whether a command succeeded or failed, I have to know every possible error message Storj can produce.
 
-And even then, you'd *still* have trouble because...
+And even then, I *still* have trouble because...
 
 **[Storj writes output inconsistently](https://github.com/Storj/storjshare-daemon/issues/336)**
 
@@ -196,7 +199,7 @@ $ cat /tmp/stderr-output.txt
   no payment address was given, try --help
 ```
 
-In a very similar case, Storj writes the nothing to stdout and instead writes the error to stderr:
+In a very similar case, Storj writes the nothing to stdout and instead writes to stderr:
 
 ```bash
 $ storjshare create --noedit --outfile /notexists/a.json --storj "0x0000000000000000000000000000000000000000" 1> /tmp/stdout-output.txt 2> /tmp/stderr-output.txt
@@ -208,9 +211,13 @@ $ cat /tmp/stderr-output.txt
 
 **The config files are all sorts of awful**
 
-And then JSON is a poor choice because it's a pain to edit by hand
+Where do I begin with the config files? I could write a whole blog post about how hard they are to deal with.
 
-For example this is what the end of the Storj config file looks like:
+First, every farmer needs its own, separate config file. And then the daemon needs its own separate config file. About half of the settings in the config file, like log verbosity or external IP, make a lot more sense on a per-system basis than a per-process basis. Splitting everything into separate files adds complexity that doesn't need to be there.
+
+Next, the config files are in a custom format that's *almost* JSON but isn't.
+
+Real JSON would be bad enough because it's unnecessarily error-prone to edit by hand. For example, this is what the end of the Storj farmer config file looks like:
 
 ```json
   // Valid units are B, KB, MB, GB, TB
@@ -221,9 +228,9 @@ For example this is what the end of the Storj config file looks like:
 }
 ```
 
-What happens if I uncomment the `maxShardSize` line? Whoops, now my config file is invalid because I forgot to add a trailing comma to the `storageAllocation` line. For a config file that requires
+What happens if I uncomment the `maxShardSize` line? Whoops, now my config file is invalid because I forgot to add a trailing comma to the `storageAllocation` line.
 
-Notice those `//` comments? Those are [not valid in JSON](https://stackoverflow.com/q/244777/90388), which means that if you try to read these files using a real JSON library, everything blows up:
+Also, did you notice those `//` comments? Those are [not valid in JSON](https://stackoverflow.com/q/244777/90388), which means that if you try to read these files using a real JSON library, everything blows up:
 
 ```bash
 $ python -c "import json; print json.load(open('/opt/storj/configs/0x161441Efd42171687dd1468A9e23E74226541c38.config'))"
@@ -240,17 +247,32 @@ Traceback (most recent call last):
 ValueError: Expecting property name: line 2 column 3 (char 4)
 ```
 
+So these files are not friendly to human editing *or* programmatic editing.
 
-I can't generate the config file myself because it includes the field `networkPrivateKey`, which expects a private key that I don't know how to generate unless I dive into the Storj implementation.
+Even though the config files look straightforward enough, I can't generate one myself. It includes the field `networkPrivateKey`, which requires me to supply a key that I don't know how to generate or format unless I dive into the Storj implementation.
 
-It also doesn't include
+There's also no way for me to determine what configuration was used to launch a farmer node. I can't query a running farmer's settings, so the only way to ensure that a farmer is running the latest configuration file is to kill it and relaunch it.
+
+But even that is unnecessarily hard because `storjshare` manages farmer nodes by node ID, but the node ID is not discoverable from the config file. Supposedly the node ID is derived from the `networkPrivateKey` field, but the exact method is not documented.
+
+So, the best option I'm aware of to discover which config file corresponds to which farmer node is to:
+
+1. Parse the config file (using a custom parser that understands the almost-JSON format)
+1. Find the `rpcPort` field
+1. Run `storjshare status`
+1. Parse its output out of the crazy, overly-formatted table it prints
+1. Find the entry in the table whose port matches
+
+A pretty unreasonable number of steps just to figure out the farmer node associated with a config file.
 
 **And other annoyances**
 
-* Storj farmers run off of config files, but you can't create these config files yourself because 
-*  
-*  JSON is also a poor choice because 
-* Storj doesn't have a documented API
+* Storj doesn't have a documented API for management, so the best you can do for automation is call its command-line utilities.
+* It's difficult to verify that you're farming successfully with Storj. Your best option seems to be to wait several days to see if you receive any data shares.
+* Storj only works if its background daemon process is running, but it's not a proper Linux service so you can't manage this daemon using standard Linux utilities.
+* Storj prints its output in a highly-formatted table, which makes it hard to consume the output using standard Linux utilities.
+
+Okay, I'm done ranting now.
 
 ## Open Source
 
