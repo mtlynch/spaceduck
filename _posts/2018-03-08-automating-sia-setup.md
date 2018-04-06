@@ -147,7 +147,7 @@ This example installs Sia on a remote machine and initializes its wallet using a
 To specify the remote machine and seed, create a file called `hosts` with the following contents:
 
 ```text
-sia-from-seed ansible_ssh_host=1.2.3.4 sia_seed="thorn amnesty erase framed technical vampire cell hive sugar silk network soil athlete butter myth viewpoint womanly software rover village yellow ticket reruns cadets wrist sensible apricot theatrics across"
+sia-from-seed ansible_host=1.2.3.4 sia_seed="thorn amnesty erase framed technical vampire cell hive sugar silk network soil athlete butter myth viewpoint womanly software rover village yellow ticket reruns cadets wrist sensible apricot theatrics across"
 ```
 
 Replace `1.2.3.4` with the IP address of your remote host, and replace the 29-word seed passphrase with your own seed. `sia-from-seed` is simply the display name for the host, so you can change this to any name you want.
@@ -180,7 +180,7 @@ This example installs Sia on a remote machine and uses the [bootstrap method](ht
 To specify the remote machine, create a file called `hosts` with the following contents:
 
 ```text
-sia-bootstrapped ansible_ssh_host=1.2.3.4
+sia-bootstrapped ansible_host=1.2.3.4
 ```
 
 Replace `1.2.3.4` with the IP address of your remote host.
@@ -218,9 +218,9 @@ This example installs Sia on multiple remote machines, allowing you to run comma
 To specify the remote machines, create a file called `hosts` with the following contents:
 
 ```text
-sia-multiple-a ansible_ssh_host=1.2.3.4
-sia-multiple-b ansible_ssh_host=1.2.3.5
-sia-multiple-c ansible_ssh_host=1.2.3.6
+sia-multiple-a ansible_host=1.2.3.4
+sia-multiple-b ansible_host=1.2.3.5
+sia-multiple-c ansible_host=1.2.3.6
 ```
 
 ```bash
@@ -285,6 +285,12 @@ This video shows the multiple-node scenario example above:
 You probably don't want to watch 10 hours of console output, so the video below skips ahead to the point where the Ansible playbook completes. The user hasn't had to interact with the installation at all since the initial launch of the playbook. When it's complete, each node has the blockchain synced and the wallet initialized:
 
 <script src="https://asciinema.org/a/Bp4oOefN6TEdbDGOZiprml2V9.js" id="asciicast-Bp4oOefN6TEdbDGOZiprml2V9-skip" data-t="630m30s" data-size="large" data-speed="1.6" async></script>
+
+## Open Source
+
+ansible-role-sia is fully open-source and available on Github:
+
+[https://github.com/mtlynch/ansible-role-sia](https://github.com/mtlynch/ansible-role-sia)
 
 ## Support
 
