@@ -1,7 +1,5 @@
 ---
 title: Automating Sia Setup
-comments: true
-hide_description: true
 layout: post
 date: '2018-03-08'
 description: How to make Sia server provisioning less of a headache.

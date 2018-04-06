@@ -1,6 +1,5 @@
 ---
 title: Automating Storj Setup
-comments: true
 layout: post
 date: '2018-04-06'
 description: Simplifying Storj headless farmer provisioning.
