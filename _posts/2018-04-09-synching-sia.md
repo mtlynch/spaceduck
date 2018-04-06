@@ -68,7 +68,6 @@ The timeouts I set in `synchronize.go` for my 73-minute sync.
 Validating and Applying the transactions in Sia’s blockchain is a very I/O intensive process. To reduce the amount of time spent doing this I/O I created a 11GB RAMDisk and synced the blockchain to the RAMDisk.
 
 Command to create an 11 GB RAMDisk and mount it at `Sia/consensus`.
-
 ```Shell
 root@v132:~# mount -t tmpfs -o size=11000m tmpfs Sia/consensus/
 root@v132:~# df -h
@@ -102,7 +101,7 @@ The reality is that most users are not going to be able to synchronize the block
 
 However, some users may be interested in a subset of the optimizations mentioned, perhaps they already run a custom version of Sia and can improve their performance with lower timeouts, or some users have lots of RAM, but are bottlenecked by the I/O performance of their hard drive.
 
-An excerpt from my `consensus.log` file showing Sia startup, and IBD (Initial Blockchain Download) complete 73 minutes later with the elapsed time in seconds spent on each step.
+An excerpt from my `consensus.log` file showing Sia startup, and IBD (Initial Blockchain Download) complete 73 minutes later with the elapsed time in seconds spent on each step.  Link to [full log](https://gist.github.com/tbenz9/6130ca40b94c6550b62b2ba65a7d77c8).
 ```Shell
 2018/04/05 20:11:41.546036 persist.go:73: STARTUP: Logging has started. Siad Version 1.3.2
 2018/04/05 20:11:49.321247 accept.go:275: Height 1000 at 1522959109
@@ -123,6 +122,6 @@ If you’re frustrated with the Sia’s initial synchronization time I recommend
 **Thomas Bennett** is a Linux System Engineer with an interest in distributed systems, high-performance computing, and massive parallel storage systems. He has been involved in the Sia community for the last 9 months and is excited to see what Sia has to offer in the coming year.
 If you enjoyed this article and would like to see more from Thomas, feel free to send a little Siacoin to his donation address below.
 * Siacoin donations (Thomas Bennett)
- * f63f6c5663efd3dcee50eb28ba520661b1cd68c3fe3e09bb16355d0c11523eebef454689d8cf
+ * `f63f6c5663efd3dcee50eb28ba520661b1cd68c3fe3e09bb16355d0c11523eebef454689d8cf`
 
 
