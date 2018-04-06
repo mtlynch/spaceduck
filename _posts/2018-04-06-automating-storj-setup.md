@@ -175,7 +175,7 @@ Most Linux applications set a failing exit code when they exit due to error. Sto
 
 But then I'm still stuck because Storj doesn't print "fail" in the output for every failure, like with this error message for invalid syntax:
 
-```
+```text
 no payment address was given, try --help
 ```
 
