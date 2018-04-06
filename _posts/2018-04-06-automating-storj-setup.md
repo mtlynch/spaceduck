@@ -1,9 +1,8 @@
 ---
 title: Automating Storj Setup
 comments: true
-hide_description: true
 layout: post
-date: '2018-04-04'
+date: '2018-04-06'
 description: Simplifying Storj headless farmer provisioning.
 tags:
 - ansible
