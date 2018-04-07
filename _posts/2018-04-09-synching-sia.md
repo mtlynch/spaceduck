@@ -119,7 +119,7 @@ An excerpt from my `consensus.log` file showing Sia startup, and IBD (Initial Bl
 2018/04/05 21:24:57.406911 synchronize.go:642: INFO: IBD done, synced with 6 peers
 ```
 
-If you’re frustrated with the Sia’s initial synchronization time I recommend you look into [bootstrapping the blockchain](Link to siasetup bootstrap).  Bootstrapping means you download a snapshot of the `consensus.db` file then only have to sync since the snapshot was taken.  Bootstrapping requires you to trust the person you download the `consensus.db` file from, but is undoubtedly the fastest method of syncing the Sia blockchain.
+If you’re frustrated with the Sia’s initial synchronization time I recommend you look into [bootstrapping the blockchain](https://siasetup.info/consensus).  Bootstrapping means you download a snapshot of the `consensus.db` file then only have to sync since the snapshot was taken.  Bootstrapping requires you to trust the person you download the `consensus.db` file from, but is undoubtedly the fastest method of syncing the Sia blockchain.
 
 ## About the author
 
