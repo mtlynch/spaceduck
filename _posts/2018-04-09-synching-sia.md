@@ -19,7 +19,8 @@ I can sync Sia from a block height of 0 to 149000 in 73 minutes.  Here’s how I
 As mentioned in my previous article [Benchmarking Sia’s Blockchain Sync](https://blog.spaceduck.io/sia-blockchain-sync/) Sia spends an average of 55 minutes or 19.1% of its time notifying subscribers.  I submitted the pull request [#2809](https://github.com/NebulousLabs/Sia/pull/2809) so Sia only notifies subscribers if there are any.  By running Sia with only the `consensus` and `gateway` modules loaded there will be zero subscribers.
 
 My `siad` command with minimal modules loaded.
-```Shell
+
+```shell
 ./siad -M cg -d /root/Sia/
 ```
 
@@ -39,36 +40,38 @@ My ISP could allow me to burst into higher speed tiers during low network conges
 Regardless of why my download speed seems off, I was able to sync from block 0 to current height in 73 minutes.
 
 The timeouts I set in `synchronize.go` for my 73-minute sync.
-```Go
-        // relayHeaderTimeout is the timeout for the RelayHeader RPC.
-        relayHeaderTimeout = build.Select(build.Var{
-                Standard: 10 * time.Second,
-                Dev:      20 * time.Second,
-                Testing:  3 * time.Second,
-        }).(time.Duration)
 
-        // sendBlkTimeout is the timeout for the SendBlocks RPC.
-        sendBlkTimeout = build.Select(build.Var{
-                Standard: 10 * time.Second,
-                Dev:      30 * time.Second,
-                Testing:  4 * time.Second,
-        }).(time.Duration)
+```go
+// relayHeaderTimeout is the timeout for the RelayHeader RPC.
+relayHeaderTimeout = build.Select(build.Var{
+        Standard: 10 * time.Second,
+        Dev:      20 * time.Second,
+        Testing:  3 * time.Second,
+}).(time.Duration)
 
-        // sendBlocksTimeout is the timeout for the SendBlocks RPC.
-        sendBlocksTimeout = build.Select(build.Var{
-                Standard: 10 * time.Second,
-                Dev:      40 * time.Second,
-                Testing:  5 * time.Second,
-        }).(time.Duration)
+// sendBlkTimeout is the timeout for the SendBlocks RPC.
+sendBlkTimeout = build.Select(build.Var{
+        Standard: 10 * time.Second,
+        Dev:      30 * time.Second,
+        Testing:  4 * time.Second,
+}).(time.Duration)
 
-```Go
+// sendBlocksTimeout is the timeout for the SendBlocks RPC.
+sendBlocksTimeout = build.Select(build.Var{
+        Standard: 10 * time.Second,
+        Dev:      40 * time.Second,
+        Testing:  5 * time.Second,
+}).(time.Duration)
+
+```
 
 ## Sync to a RAMDisk
 
 Validating and Applying the transactions in Sia’s blockchain is a very I/O intensive process. To reduce the amount of time spent doing this I/O I created a 11GB RAMDisk and synced the blockchain to the RAMDisk.
 
 Command to create an 11 GB RAMDisk and mount it at `Sia/consensus`.
-```Shell
+
+```shell
 root@v132:~# mount -t tmpfs -o size=11000m tmpfs Sia/consensus/
 root@v132:~# df -h
 Filesystem                        Size  Used Avail Use% Mounted on
@@ -102,7 +105,8 @@ The reality is that most users are not going to be able to synchronize the block
 However, some users may be interested in a subset of the optimizations mentioned, perhaps they already run a custom version of Sia and can improve their performance with lower timeouts, or some users have lots of RAM, but are bottlenecked by the I/O performance of their hard drive.
 
 An excerpt from my `consensus.log` file showing Sia startup, and IBD (Initial Blockchain Download) complete 73 minutes later with the elapsed time in seconds spent on each step.  Link to [full log](https://gist.github.com/tbenz9/6130ca40b94c6550b62b2ba65a7d77c8).
-```Shell
+
+```text
 2018/04/05 20:11:41.546036 persist.go:73: STARTUP: Logging has started. Siad Version 1.3.2
 2018/04/05 20:11:49.321247 accept.go:275: Height 1000 at 1522959109
 … TRUNCATED
@@ -120,8 +124,8 @@ If you’re frustrated with the Sia’s initial synchronization time I recommend
 ## About the author
 
 **Thomas Bennett** is a Linux System Engineer with an interest in distributed systems, high-performance computing, and massive parallel storage systems. He has been involved in the Sia community for the last 9 months and is excited to see what Sia has to offer in the coming year.
+
 If you enjoyed this article and would like to see more from Thomas, feel free to send a little Siacoin to his donation address below.
+
 * Siacoin donations (Thomas Bennett)
- * `f63f6c5663efd3dcee50eb28ba520661b1cd68c3fe3e09bb16355d0c11523eebef454689d8cf`
-
-
+  * `f63f6c5663efd3dcee50eb28ba520661b1cd68c3fe3e09bb16355d0c11523eebef454689d8cf`
