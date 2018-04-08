@@ -187,7 +187,7 @@ And even then, I *still* have trouble because...
 
 For some commands, Storj writes error messages to stdout. For others, it writes error messages to stderr.
 
-See for example the following two calls to `storjshare create`. In the first case, Storj writes the error message to stdout:
+See for example the following two calls to `storjshare create`. In the first case, Storj writes the error message to stderr:
 
 ```bash
 $ storjshare create --noedit --outfile /tmp/a.json 1> /tmp/stdout-output.txt 2> /tmp/stderr-output.txt
@@ -197,7 +197,7 @@ $ cat /tmp/stderr-output.txt
   no payment address was given, try --help
 ```
 
-In a very similar case, Storj writes the nothing to stdout and instead writes to stderr:
+In a very similar case, Storj writes the nothing to stderr and instead writes to stdout:
 
 ```bash
 $ storjshare create --noedit --outfile /notexists/a.json --storj "0x0000000000000000000000000000000000000000" 1> /tmp/stdout-output.txt 2> /tmp/stderr-output.txt
