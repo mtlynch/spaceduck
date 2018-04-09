@@ -83,7 +83,6 @@ My `siad` command with minimal modules loaded.
 
 With zero subscribers Sia skips the notify subscribers functions and shaves 55 minutes off the synchronization time.  Note that with only the `consensus` and `gateway` modules loaded you cannot rent, host, or use the Sia wallet making it useless for most users.  It is possible to sync with only the `consensus` and `gateway` modules loaded, then restart Sia with the other modules loaded to regain full functionality.
 
-
 ## Future optimizations
 
 ### Increased batch size
@@ -99,6 +98,7 @@ Many optimizations such as parallel block downloads, smarter timeouts, I/O buffe
 Concerns about the blockchain size and performance have been brought up several times, and the Sia devs have several ideas on how to support a large blockchain.  You can read some of the discussion on GitHub in issue [#2897](https://github.com/NebulousLabs/Sia/issues/2897).
 
 ## Conclusion
+
 By reducing the timeouts, removing modules, and syncing to a RAMDisk I was able to achieve a 76% reduction in initial sync time.  While this may not be achievable for the average user it demonstrates some different options for sync optimizations and what could be done in the future to further reduce sync time.  You can see my log file for the 73-minute sync [here](https://gist.github.com/tbenz9/6130ca40b94c6550b62b2ba65a7d77c8).
 
 ## About the author
