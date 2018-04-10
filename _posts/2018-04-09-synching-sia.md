@@ -62,7 +62,7 @@ Note that while a RAMDisk is an excellent method of improving the sync time, it 
 
 In [my previous tests](https://blog.spaceduck.io/sia-blockchain-sync/), I found that Sia spends 19.1% of its time sending notifications across modules. After making this discovery, I submitted a [pull request](https://github.com/NebulousLabs/Sia/pull/2809) to skip the notifications step entirely when other modules are not running.
 
-Starting with Sia v.13.2, you can take advantage of this optimization by performing the initial Sia sync with a minimal set of modules loaded:
+Starting with Sia v.1.3.2, you can take advantage of this optimization by performing the initial Sia sync with a minimal set of modules loaded:
 
 ```shell
 ./siad --modules cg
