@@ -88,7 +88,7 @@ Concerns about the blockchain size and performance have been brought up several 
 
 ## Raw data
 
-*   [Consensus log](https://gist.github.com/tbenz9/6130ca40b94c6550b62b2ba65a7d77c8)
+* [Consensus log](https://gist.github.com/tbenz9/6130ca40b94c6550b62b2ba65a7d77c8)
 
 ## Conclusion
 
