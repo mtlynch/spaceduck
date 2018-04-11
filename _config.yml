@@ -65,6 +65,8 @@ permalink:             pretty
 paginate:              4
 paginate_path:         /page:num/
 
+future:                yes
+
 
 # Customizaton
 # ========================================================================================
