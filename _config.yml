@@ -158,6 +158,10 @@ collections:
     permalink:         /projects/:path/
     output:            true
 
+  posts:
+    permalink:         /:title/
+    output:            true
+
 defaults:
   - scope:
       type: posts

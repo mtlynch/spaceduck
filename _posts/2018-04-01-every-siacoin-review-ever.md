@@ -9,7 +9,6 @@ tags:
 - sia
 - siacoin
 - speculation
-permalink: "/every-siacoin-review-ever/"
 image: "/images/2018-04-01-every-siacoin-review-ever/thumbnail.jpg"
 ---
 

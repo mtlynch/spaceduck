@@ -6,7 +6,6 @@ description: How hard can a simple timestamp be?
 tags:
 - sia
 - timestamps
-permalink: "/sia-block-timestamps/"
 ---
 
 As I was gathering my cryptocurrency records for what promises to be an exciting tax season, I stumbled upon a Sia task that I never expected to be hard: finding a Sia block's timestamp.

@@ -7,7 +7,6 @@ description: If you're expecting any of the 2018 Q1 features to happen, I have b
 tags:
 - sia
 - timestamps
-permalink: "/dont-trust-the-roadmap/"
 ---
 
 For the past few weeks, I've seen cryptocurrency bloggers breathlessly tell their readers about all the exciting things Sia will do in the first quarter of 2018.

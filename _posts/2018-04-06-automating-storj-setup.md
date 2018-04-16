@@ -7,7 +7,6 @@ tags:
 - ansible
 - storj
 - automation
-permalink: "/automating-storj-setup/"
 ---
 
 I recently tried running Storj and was quickly confused. The [Github repo](https://github.com/Storj/storjshare-daemon) includes instructions for installing Storj on the command-line, but it never explains how to actually *run* it.

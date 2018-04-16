@@ -7,7 +7,6 @@ tags:
 - sia
 - blockchain
 - benchmark
-permalink: "/performance-tuning-sia/"
 ---
 
 *This is a guest post by Sia community contributor [Thomas Bennett](https://github.com/tbenz9).*
