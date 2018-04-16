@@ -26,6 +26,8 @@
     figure.  If a figure tag is to be used, then the class will apply to the
     figure tag.  If a figure tag is not being used, then the class will apply
     to the image tag.
+  @param {boolean} "border" - Optional, default is false. If img should have a
+    surrounding 1px border.
 -->
 {% endcomment %}
 
@@ -53,4 +55,5 @@
     media_rendition: {{ media_rendition }}
     max_width: {{ include.max_width }}
     class: {{ include.class }}
+    border: {{ include.border }}
 {% endresponsive_image_block %}
