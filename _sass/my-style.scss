@@ -85,3 +85,31 @@ pre {
   background-color: rgb(38, 139, 210);
   border-color: rgb(38, 139, 210);
 }
+
+/* Table Styles */
+table:not(.highlight) {
+  margin: 0 0 1rem 0;
+  width: auto;
+  font-size: 10px;
+
+  @media screen and (min-width: $break-point-2) {
+    font-size: 12px;
+  }
+
+  @media screen and (min-width: $break-point-3) {
+    font-size: 14px;
+  }
+
+  @media screen and (min-width: $break-point-4) {
+    font-size: 17px;
+  }
+
+  th:first-child, td:first-child, th, td {
+    padding: .1rem;
+
+    @media screen and (min-width: $break-point-2) {
+      padding: .25rem;
+    }
+  }
+
+}
