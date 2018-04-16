@@ -1,0 +1,33 @@
+{
+  "name": "space-duck",
+  "version": "1.0.0",
+  "description": "Space Duck website custom npm build scripts",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mtlynch/spaceduck.git"
+  },
+  "keywords": [
+    "jekyll",
+    "spaceduck",
+    "hydejack"
+  ],
+  "author": "Michael Lynch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mtlynch/spaceduck/issues"
+  },
+  "homepage": "https://blog.spaceduck.io/",
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "devDependencies": {
+    "npm-run-all": "^1.7.0",
+    "onchange": "^2.2.0",
+    "uglify-js": "^2.6.1"
+  },
+  "scripts": {
+    "uglify": "uglifyjs assets/js/_vendor/**/*.js assets/js/_plugins/*.js assets/js/_custom/*.js -c -m -o assets/js/main.min.js",
+    "watch:js": "onchange \"assets/js/**/*.js\" -e \"assets/js/main.min.js\" -- npm run build:js",
+    "build:js": "npm run uglify"
+  }
+}

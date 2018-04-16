@@ -66,7 +66,7 @@
 {% endif %}
 
 {% if img_url %}
-<a href="{{ img_url }}">
+<a href="{{ img_url }}" class="no-push-state">
   <img src="/{{ path }}" alt="{{ alt }}" srcset="{{ srcset | strip_newlines }}" sizes="{{ sizes }}" class="{{ class }}"{% if max_width %} style="max-width:{{ sizes }}"{% endif %}>
 </a>
 {% else %}
