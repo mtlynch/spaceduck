@@ -7,7 +7,6 @@ description: A rigorous test of Sia's upload capacity.
 tags:
 - sia
 - load test
-permalink: "/sia-load-test-preview/"
 ---
 
 Sia's [first blog post of 2018](https://blog.sia.tech/sia-triannual-update-september-december-2017-8afdf9c10325) made it clear that this is the year they hope to achieve enterprise adoption:

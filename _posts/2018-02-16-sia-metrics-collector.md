@@ -7,7 +7,6 @@ tags:
 - sia
 - metrics
 - load test
-permalink: "/sia-metrics-collector/"
 ---
 
 When I initially thought of [load testing Sia](/sia-load-test-preview/), I thought I'd just watch Sia through its GUI, Sia-UI. As I started writing the test automation, I realized I wanted more insight into what Sia was doing throughout the test.

@@ -7,7 +7,6 @@ tags:
 - ansible
 - sia
 - automation
-permalink: "/automating-sia-setup/"
 ---
 
 One of the biggest headaches in using Sia is how long it takes to complete the initial setup. Unfortunately, I can't solve that problem. What I can do is make it less tedious and labor-intensive.

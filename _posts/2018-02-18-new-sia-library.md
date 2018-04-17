@@ -6,7 +6,6 @@ description: A first look at a long-awaited library.
 tags:
 - sia
 - api
-permalink: "/new-sia-library/"
 ---
 
 In my last post, I described the [testing tools](/sia-metrics-collector/) I developed to load test Sia. I shared that article on [reddit](https://redd.it/7y2q3k) and lamented the fact that I had to write my tools in Python using a third-party library because Sia doesn't offer any official client libraries.
