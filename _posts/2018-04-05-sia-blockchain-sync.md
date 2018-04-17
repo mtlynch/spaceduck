@@ -7,8 +7,7 @@ description: "An investigation into the bottlenecks of Sia's blockchain sync and
 tags:
 - sia
 - benchmark
-permalink: "/sia-blockchain-sync/"
-image: "/images/2018-04-05-benchmarking-sia/default-configuration-pie.png"
+image: "/images/2018-04-05-sia-blockchain-sync/default-configuration-pie.png"
 ---
 
 *This is a guest post by Sia community contributor [Thomas Bennett](https://github.com/tbenz9).*
