@@ -17,3 +17,4 @@ assets/js/main.min.js
 assets/js/script-compiled.js
 images/resized/
 _update_date.py
+_sass/vendor
