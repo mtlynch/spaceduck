@@ -13,6 +13,34 @@ permalink: "/load-test-wrapup/"
 
 ## Result summary
 
+| Metric | Value |
+|---------|---------|
+| Total uploaded | 47.2 KiB (file bytes)<br />9.8 TiB (absolute bytes) |
+| Storage efficiency | 0.0000004470% |
+| Total files uploaded | 48,358 |
+| Total file contracts created | 60 |
+| Total spent | 3625 SC<br />$50.75\* USD |
+| $ per TB/month | $350 million [sic]\*\* |
+| Total test time | 596.8 hours (24.9 days) |
+| Average upload bandwidth | 0.00000018 Mbps (file data)<br />40.3 Mbps (absolute) |
+| Sia crashes | 0 |
+| Sia version | 1.3.1 |
+| Test OS | Win10 x64 |
+
+| Metric | Value |
+|---------|---------|
+| Total uploaded | 4.3 TiB (file bytes)<br />15.4 TiB (absolute bytes) |
+| Storage efficiency | 28.3% |
+| Total files uploaded | 2,626 |
+| Total file contracts created | 62 |
+| Total spent | 4377.1 SC<br />$61.07\* USD |
+| $ per TB/month | $4.51\*\* |
+| Total test time | 231.7 hours (9.7 days) |
+| Average upload bandwidth | 45.8 Mbps (file data)<br />162.1 Mbps (absolute) |
+| Sia crashes | 0 |
+| Sia version | 1.3.1 |
+| Test OS | Win10 x64 |
+
 ## What I learned about Sia
 
 ### Sia is robust
@@ -23,7 +51,7 @@ Having used Sia for almost two years and seeing my fair share of Sia crashes in 
 
 ### Bandwidth is very price-competitive
 
-### Prices are unpredictable
+### Costs are unpredictable
 
 ### Cost accounting is unreliable
 
