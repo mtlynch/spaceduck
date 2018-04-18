@@ -1,10 +1,8 @@
 ---
 title: Fun with Sia and Docker
-comments: true
-hide_description: true
 layout: post
 date: '2018-04-18'
-description: Testing Sia's maximum capacity under ideal conditions
+description: Some examples of the cool things you can do with the Sia docker image.
 tags:
 - sia
 - docker
