@@ -6,7 +6,7 @@ description: Some examples of the cool things you can do with the Sia docker ima
 tags:
 - sia
 - docker
-image: https://asciinema.org/a/sfDVIHYX3KtS8im1U6GhwuTiG.png
+image: "/images/2018-04-18-sia-docker/docker-shell.png"
 ---
 
 Over the past few weeks, I've been working on a full-featured Docker image for Sia. If you have Docker, you can now spin up a Sia node in seconds with a single command. Running Sia within Docker gives you more power and provides helpful tools for development or experimentation.
