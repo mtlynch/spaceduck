@@ -139,7 +139,9 @@ $ docker run \
 Surprisingly, Sia ran successfully. The blockchain sync was incredibly slow, but it ran overnight without ever crashing:
 
 ```bash
+{% raw %}
 $ docker stats --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}"
+{% endraw %}
 CONTAINER           CPU %               MEM USAGE / LIMIT
 bbcdc2a7bab4        0.57%               19.9MiB / 20MiB
 $ docker exec -it sia-container ./siac
