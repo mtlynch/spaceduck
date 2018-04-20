@@ -49,7 +49,7 @@ $ docker run \
    --publish 9981:9981 \
    --publish 9982:9982 \
    --name sia-container \
-    mtlynch/sia:latest
+    mtlynch/sia
 ```
 
 The shell capture below demonstrates these commands in action:
@@ -225,7 +225,14 @@ $ docker run \
 
 Now you have a Docker container optimized for Sia hosting. If Sia ever crashes, Docker will restart it and auto-unlock the wallet so that you can continue accepting new contracts.
 
-When new versions of Sia are released, upgrading is easy. Just remove the container with `docker rm -f sia-container` and re-run the last `docker run` command shown above. Docker will automatically pull down the image of Sia that has the latest version of Sia. Your host will upgrade and come back online in seconds.
+When new versions of Sia are released, upgrading is easy. Just remove the container and pull down the latest image:
+
+```bash
+docker rm -f sia-container
+docker pull mtlynch/sia
+```
+
+Then re-run the last `docker run` command shown above. Docker will automatically pull down the image of Sia that has the latest version of Sia. Your host will upgrade and come back online in seconds.
 
 ### Running Sia on a NAS
 
