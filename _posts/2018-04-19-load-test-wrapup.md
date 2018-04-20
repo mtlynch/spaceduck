@@ -45,34 +45,69 @@ permalink: "/load-test-wrapup/"
 
 ### Sia is robust
 
-Having used Sia for almost two years and seeing my fair share of Sia crashes in earlier versions, I was impressed that Sia 
+Having used Sia for almost two years and seeing my fair share of Sia crashes in earlier versions, I was impressed that Sia never crashed. Anecdotally, many of the errors I see people report are due to Sia exhausting memory. My tests were less at risk of exhausting memory due to the fact that I was running on a PC with 32 GB of RAM and the test automation kept Sia limited to a maximum of five simultaneous uploads.
 
 ### Storage isn't that cheap
 
-Sia has always listed low storage costs as one of their main advantage over competitors like Amazon S3.
+Sia has always listed low storage costs as one of their main advantage over competitors like Amazon S3. Once you take into account fees, 
 
 ### Upload bandwidth is inexpensive
 
 Traditional cloud storage providers typically give away upload bandwidth for free as a way of encouraging customers to pay for services once it's uploaded. Sia charges
 
-The more interesting test is download bandwidth
+The more interesting test is download bandwidth. I'm assuming that contract fees stay fixed even with additional downloads. If download causes jumps in fees the same way that uploading does, then it won't be so cheap.
+
+### Cost estimates are wildly inaccurate
+
+Sia offers a [`/renter/prices` API](https://github.com/NebulousLabs/Sia/blob/master/doc/api/Renter.md#json-response-4) that the Sia GUI and command-line client rely on to provide cost estimates before you store your data on Sia.
+
+Because of Sia's errors in accounting, I treated the wallet's remaining balance as the ground-truth measure of how much Sia spent in contracts and scaled by a constant factor.
+
+#### Real data scenario
+
+| Cost    | Advertised | Actual (corrected accounting)\* | % error in advertised cost |
+|--|----------------|--------------------------------------------------|---------------------------------|----|
+| Upload (SC/TB) | 27.7 | 35.2 | +27.4% |
+| Storage (SC/TB/month) | 96.5 | 203.5 | +110.8% |
+| Contract fees (SC) | 56.2 | 1,117.3 | +1,888.1% |
+
+\* Scaling Sia's reported costs by 1.74x to correct for accounting bugs.
+
+#### Best-case scenario
+
+| Cost    | Advertised | Actual (corrected accounting)\* | % error in advertised cost |
+|--|----------------|--------------------------------------------------|---------------------------------|----|
+| Upload (SC/TB) | 37.1 | 53.1 | +43.2% |
+| Storage (SC/TB/month) | 99.1 | 188.2 | +90.0% |
+| Contract fees (SC) | 70.0 | 710.0 | +914.9% |
+
+\* Scaling Sia's reported costs by 1.13x to correct for accounting bugs.
+
+I've omitted the worst-case scenario from this comparison because the numbers are so high that they're meaningless.
 
 ### Costs are unpredictable
 
+```text
+total_cost = (file_size * upload_cost) +
+             (file_size * storage_cost) +
+             (file_size * download_cost)
 ```
-Total cost (S3) = 1 TB * X $/TB storage + 1 TB *  Y $/TB download
 
-cost = (file_size * upload_cost) + (file_size * storage_cost) + (file_size * download_cost)
+In reality, there are some additional cost per API call, but these are negligible. I believe for a load test similar to the ones I ran on Sia, the additional costs of API calls on S3 would be a few cents. talking costs of a few cents for usage similar to my load tests.
+
+https://therub.org/2015/11/18/glacier-costlier-than-s3-for-small-files/
+
+```text
+contract_size = file_size * (1 / storage_efficiency)
+total_cost = (contract_size * upload_cost) +
+             (contract_size * storage_cost) +
+             (file_size * download_cost) +
+             ((contract_count + contract_renewals) * contract_fee)
 ```
 
-```
-Total cost (Sia) = 1 TB * 5 $/TB storage + 1 TB * Y $/TB upload + 1 TB * Z $/TB download + ??? contract fee * (??? contracts + ??? contract renewals)
-```
+Storage efficiency depends on the degree of replication (by default, 3x), the distribution of file sizes in your data, and how stable your hosts are.
 
 ### Cost accounting is unreliable
-
-Because it doesn't seem possible to predict when Sia will spend money on contracts, it's not possible to compare it
-
 
 I filed two bugs related to accounting two months ago, but neither has received a response from the dev team:
 
@@ -82,6 +117,16 @@ I filed two bugs related to accounting two months ago, but neither has received 
 ### Fees represent a high proportion of cost
 
 I never looked too deeply into contract fees, but I assumed they were a small percentage of 
+
+| Test case | Fee spending (incorrect accounting) | Total spending (incorrect accounting) | Fee % |
+|-------------|-----------------|----------------|--------|
+| [Worst-case](/load-test-1) | 697.6 SC | 1,593.1 SC | 43.8% |
+| [Real data](/load-test-2) | 640.6 SC | 2,243.8 SC | 28.5% |
+| [Best-case](/load-test-3) | 628.6 SC | 1,473.3 | 42.7% |
+
+### Fees are variable, not fixed
+
+Increase with the amount of data uploaded, increase with the size of the allowance.
 
 ### Contract spending is unintuitive
 
@@ -123,7 +168,7 @@ One of the surprising outcomes of the load test was that the real data scenario 
 
 Due to the previous point about bandwidth, Sia performs much better with a small set of very large files as opposed to a large set of ~40 MiB files. A better best-case scenario would probably use files that are ~20 GiB each (512x Sia's chunk size).
 
-### Keep testing the worst-case
+### Increase file sizes for worst-case scenario
 
 I want to take a moment to emphasize the importance of this test.
 
@@ -132,6 +177,8 @@ You could build a file-repacking layer on top of it.
 ## Why I'm not continuing to test Sia
 
 I never intended to run these on a regular basis. I wanted to demonstrate that these metrics are valuable. I'd go so far as to say that tracking these metrics is *necessary*.
+
+There is a group of volunteers discussing a plan for running these tests on an ongoing basis. If you're interested in helping these efforts, email me at michael@spaceduck.io and I'll put you in touch with them.
 
 ## Test plan
 
