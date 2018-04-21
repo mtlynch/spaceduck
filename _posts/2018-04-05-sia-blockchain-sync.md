@@ -20,7 +20,7 @@ I was frustrated with how long the initial sync was taking so I decided to look 
 
 Every Siacoin, Siafund, smart contract, and storage proof transaction is stored on the Sia blockchain and in your local `consensus.db` file. Add all these transactions together and you're looking at over 8,000,000 transactions stored as of March 2018.
 
-{% include image.html file="total-transactions.png" alt="total transactions graph" fig_caption="Total historic Sia blockchain transactions &#40;Source&#58; SiaStats.info&#41;" img_link="true" %}
+{% include image.html file="total-transactions.png" alt="total transactions graph" fig_caption="Total historic Sia blockchain transactions &#40;Source&#58; SiaStats.info&#41;" img_link="true" border="true" %}
 
 When you perform the initial sync, Sia downloads every block (over 146,000 at the time of this writing) from its peers and adds them to the local `consensus.db` file. Before adding it to your `consensus.db` file Sia performs a variety of actions on every block. The workflow looks something like this:
 
@@ -35,7 +35,7 @@ Sia downloads blocks in batches of 10, but it needs to process and validate ever
 
 I was frustrated with how long the initial sync took, so I started to do some rough benchmarking and made some interesting discoveries.
 
-{% include image.html file="default-configuration-pie.png" alt="time-spent-on-each-task-pie-chart" fig_caption="Percent time spent on each task" img_link="true" %}
+{% include image.html file="default-configuration-pie.png" alt="time-spent-on-each-task-pie-chart" fig_caption="Percent time spent on each task" img_link="true" border="true" %}
 
 ## Downloading blocks
 
@@ -48,7 +48,7 @@ My benchmarking revealed that with default Sia settings it took an average of 16
 * Sia downloads in small batches
   * Sia downloads bocks in batches of 10. That means Sia requests blocks at least 14,600 times for a full blockchain sync. I believe Sia could request blocks in batches of 100, or even 1,000 and reduce some of the overhead from making so many requests.
 
-{% include image.html file="blockchain-size.png" alt="Sia blockchain size graph" fig_caption="Sia blockchain growth over time &#40;Source&#58; SiaStats.info&#41;" img_link="true" %}
+{% include image.html file="blockchain-size.png" alt="Sia blockchain size graph" fig_caption="Sia blockchain growth over time &#40;Source&#58; SiaStats.info&#41;" img_link="true" border="true" %}
 
 ## Validate every transaction in block
 
