@@ -49,7 +49,9 @@ Having used Sia for almost two years and seeing my fair share of Sia crashes in 
 
 ### Storage isn't that cheap
 
-Sia has always listed low storage costs as one of their main advantage over competitors like Amazon S3. Once you take into account fees, 
+Sia has always listed low storage costs as one of their main advantage over competitors like Amazon S3. Once you take into account fees, Sia isn't that much cheaper.
+
+That also excludes frictional costs involved in actually acquiring Siacoin, which requires users to convert fiat currency to Bitcoin or Ethereum, then trade that for Siacoin.
 
 ### Upload bandwidth is inexpensive
 
