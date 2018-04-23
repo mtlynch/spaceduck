@@ -82,9 +82,9 @@ This isn't exciting in itself because cloud providers typically charge zero for 
 
 ### Cost accounting is unreliable
 
-Sia reports spending through both its [`renter` APIs](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter) and its [`wallet` APIs](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#wallet). Unfortunately, these two APIs give figures that [contradict one another](https://github.com/NebulousLabs/Sia/issues/2772).
+Sia reports spending through both its [`renter` APIs](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter) and its [`wallet` APIs](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#wallet). Unfortunately, these two APIs [contradict each other](https://github.com/NebulousLabs/Sia/issues/2772). The amount of money the `renter` APIs report in contracts is less than the amount that the `wallet` APIs report as deducted from the Sia wallet. For the purposes of these tests, I treated the `wallet` API as the ground truth for spending.
 
-Sia also reports metrics that are logically impossible. In each of the tests, Sia's accounting showed increases and *decreases* in total storage spending over time. Decreases in total storage spending shouldn't be possible, because when Sia spends money on a storage contract, that money is spent and can't go down. This is [a bug](https://github.com/NebulousLabs/Sia/issues/2768).
+Sia also reports spending metrics that are logically impossible. In each of the tests, Sia's accounting showed increases and *decreases* in total storage spending over time. Decreases in total storage spending shouldn't be possible, because when Sia spends money on a storage contract, that money is spent and can't go down. This is [a bug](https://github.com/NebulousLabs/Sia/issues/2768).
 
 ### Cost estimates are wildly inaccurate
 
@@ -114,7 +114,7 @@ Because of Sia's errors in accounting, I treated the wallet's remaining balance 
 
 I've omitted the worst-case scenario from this comparison because the numbers are so high that they're meaningless.
 
-Sia-UI has a separate price estimation bug, but ironically, this additional bug makes Sia's estimates more accurate.  Sia-UI uses the overly optimistic pricesthe incorrect prices from the `/renter/prices` API and performs an incorrect calculation as [Sia-UI uses API prices incorrectly](https://github.com/NebulousLabs/Sia-UI/issues/775).
+Sia-UI has a separate price estimation bug that exacerbates the incorrect estimates, but ironically, this additional bug makes Sia's estimates more accurate.  Sia-UI uses the overly optimistic pricesthe incorrect prices from the `/renter/prices` API and performs an incorrect calculation as [Sia-UI uses API prices incorrectly](https://github.com/NebulousLabs/Sia-UI/issues/775).
 
 ### Costs are unpredictable
 
@@ -194,6 +194,10 @@ Due to the previous point about bandwidth, Sia performs much better with a small
 I want to take a moment to emphasize the importance of this test.
 
 You could build a file-repacking layer on top of it.
+
+### Automate, automate, automate
+
+TODO
 
 ## Why I'm not continuing to test Sia
 
