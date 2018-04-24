@@ -11,6 +11,8 @@ tags:
 permalink: "/load-test-wrapup/"
 ---
 
+I completed testing on all scenarios from the load test. I published a write-up following each test, but I wanted to do one final summary to cover the tests at a higher level. I cover the high level takeaways from the test and how I think the Sia community should test Sia going forward.
+
 ## Result summary
 
 | Metric | [Worst-case](/load-test-1) | [Real data](/load-test-2) | [Best-case](/load-test-3) |
@@ -47,34 +49,34 @@ permalink: "/load-test-wrapup/"
 
 I've been using Sia for almost two years now. I like to push Sia's limits and run it under weird scenarios, which means I've seen a lot of Sia crashes over the years.
 
-Sia didn't crash once during these tests. Cumulatively, Sia ran stably for 48.6 days, processing 91,536 files without a single crash.
+Sia didn't crash once during these tests. Cumulatively, Sia ran for 48.6 days and processed 91,536 files without a single crash.
 
-I still see users report crashes on versions 1.3.1 and 1.3.2, and anecdotally these seem to be mostly related to Sia exhausting memory. In this load test, Sia was running on a system with 32 GB of RAM, so RAM was harder to exhaust. In addition, the test automation kept Sia limited to a maximum of five simultaneous uploads, which may have kept memory demands in check.
+I still see users report crashes on versions 1.3.1 and 1.3.2. Anecdotally, the crashes seem to be mostly related to Sia exhausting memory. In this load test, Sia was running on a system with 32 GB of RAM, so RAM was harder to exhaust. In addition, the test automation kept Sia limited to a maximum of five simultaneous uploads, which may have kept memory demands in check.
 
 ### Storage isn't that cheap
 
-Sia has always listed low storage costs as one of their main advantage over competitors like Amazon S3. Once you account for Sia's fees, it remains low cost, but the savings are not as dramatic as advertised.
+Sia has always listed low storage costs as one of their competitive advantages.  A 50% reduction is significant, but it's not close to Sia's frequently cited claim of "90% less than incumbent cloud storage providers."
 
-The test with the best cost efficiency was the real data test, which achieved a cost per TB/month of storage of $4.51. This is certainly lower than Amazon S3's standard storage class ($23 per TB/month), but the comparison to S3 isn't quite realistic. AWS doesn't have an offering that's similar to Sia in performance. Standard S3 is much more performant than Sia, whereas Amazon Glacier is much less performant, so neither comparison quite works.
+I found that in practice, taking into account fees and extra costs from replication, Sia remains low-cost, but the savings are not as dramatic as advertised.
 
-Google Cloud Storage's (GCS) nearline storage class is probably the closest comparison in terms of performance, and it's $10 per TB/month. A 50% reduction is significant, but it's not close to Sia's frequently cited claim of "90% less than incumbent cloud storage providers."
+The test with the best cost efficiency was the real data test, which achieved $4.51 per TB/month. This is certainly lower than Amazon S3's standard storage class ($23 per TB/month), but the comparison to S3 isn't quite realistic. AWS doesn't have an offering that's similar to Sia in performance. Standard S3 is much more performant than Sia, whereas Amazon Glacier is much less performant. Neither comparison quite works.
 
-Further, there are low-cost centralized providers like Backblaze B2 and [Wasabi](https://wasabi.com/) that offer storage for $5 per TB/month.
+Google Cloud Storage's (GCS) nearline storage class is probably the closest comparison in terms of performance. It's $10 per TB/month. Further, there are low-cost centralized providers like Backblaze and [Wasabi](https://wasabi.com/) that offer storage for $5 per TB/month.
 
 |                                                                          | Sia | Amazon S3<br>(Standard) | GCS Nearline | Azure | Backblaze B2 |
 |-----------------------------------------|-----|---------------------------|-------------------|--------|------------------|
 | Storage cost<br>(per TB per month) | $4-5 | $23 | $10 | $18.40 | $5 |
 
-Note that I'm excluding some costs for this comparison that I consider negligible:
+I'm excluding some costs for this comparison that I consider negligible:
 
-* I exclude the frictional costs involved in actually acquiring Siacoin, which requires users to convert fiat currency to a mainstream cryptocurrency such as Bitcoin or Ethereum, then trade that cryptocurrency for Siacoin.
+* I exclude the frictional costs involved in acquiring Siacoin. To use Sia, the user must convert fiat currency to a mainstream cryptocurrency such as Bitcoin or Ethereum, then trade that cryptocurrency for Siacoin. Each conversion and coin transfer incurs a small frictional cost.
 * For traditional storage providers, I'm neglecting per-request costs, which some providers charge, but generally account for \<1% of costs in normal usage.
 
 ### Upload bandwidth is inexpensive
 
 One surprising result was how inexpensive upload bandwidth was. For the real data and best-case tests, upload bandwidth was around $0.40-$0.70 per TB of file data uploaded (I'll explain the inexact numbers [below](#cost-accounting-is-unreliable)).
 
-This isn't exciting in itself because cloud providers typically charge zero for inbound data transfers. It does, however, bode well for download bandwidth costs. I didn't measure downloads in this test, but if they're even within an order of magnitude of upload bandwidth, it would give Sia a huge price advantage over traditional storage providers:
+This isn't exciting in itself because cloud providers typically charge zero for inbound data transfers. It does, however, bode well for download bandwidth costs. I didn't measure downloads in this test, but if they're within even an order of magnitude of upload bandwidth, it would give Sia a huge price advantage over traditional storage providers:
 
 |                                                                          | Amazon S3<br>(Standard) | GCS Nearline | Azure | Backblaze B2 |
 |-----------------------------------------|---------------------------|-------------------|--------|------------------|
@@ -82,9 +84,17 @@ This isn't exciting in itself because cloud providers typically charge zero for 
 
 ### Cost accounting is unreliable
 
-Sia reports spending through both its [`renter` APIs](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter) and its [`wallet` APIs](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#wallet). Unfortunately, these two APIs [contradict each other](https://github.com/NebulousLabs/Sia/issues/2772). The amount of money the `renter` APIs report in contracts is less than the amount that the `wallet` APIs report as deducted from the Sia wallet. For the purposes of these tests, I treated the `wallet` API as the ground truth for spending.
+Sia reports its spending through both its [`renter` APIs](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter) and its [`wallet` APIs](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#wallet). Unfortunately, these two APIs [contradict each other](https://github.com/NebulousLabs/Sia/issues/2772). The amount of money the `renter` APIs report in contracts is less than the amount that the `wallet` APIs report as deducted from the Sia wallet.
 
-Sia also reports spending metrics that are logically impossible. In each of the tests, Sia's accounting showed increases and *decreases* in total storage spending over time. Decreases in total storage spending shouldn't be possible, because when Sia spends money on a storage contract, that money is spent and can't go down. This is [a bug](https://github.com/NebulousLabs/Sia/issues/2768).
+| Test case | Spending according to `/renter/contracts` | Spending according to `/wallet` | Discrepancy |
+|-------------|-----------------------------------------------------|----------------------------------------|--------|
+| [Worst-case](/load-test-1) | 2,966.7 SC | 5,000.0 SC | 2033.3 SC |
+| [Real data](/load-test-2) | 2,866.7 SC | 5,000.0  SC | 2,133.3 SC |
+| [Best-case](/load-test-3) | 2,833.3 SC | 3,200.0 SC | 366.7 SC |
+
+For the purposes of these tests, I treated the `wallet` API as the ground truth for spending.
+
+Sia also reports spending metrics that are [logically impossible](https://github.com/NebulousLabs/Sia/issues/2768). In each of the tests, Sia's accounting showed increases and *decreases* in total storage spending over time. Decreases in total storage spending shouldn't be possible, because when Sia spends money on a storage contract, that money is spent and can't go down.
 
 ### Cost estimates are wildly inaccurate
 
@@ -116,7 +126,15 @@ I've omitted the worst-case scenario from this comparison because the numbers ar
 
 Sia-UI has a separate price estimation bug that exacerbates the incorrect estimates, but ironically, this additional bug makes Sia's estimates more accurate.  Sia-UI uses the overly optimistic pricesthe incorrect prices from the `/renter/prices` API and performs an incorrect calculation as [Sia-UI uses API prices incorrectly](https://github.com/NebulousLabs/Sia-UI/issues/775).
 
-### Costs are unpredictable
+### Costs are complex and unpredictable
+
+In addition to Sia's inaccurate estimates, Sia's costs are so complex and depend on so many unknown factors that it's impossible to predict Sia's costs in advance.
+
+To explain, I'll compare the costs of a simple scenario on traditional providers, then attempt to calculate the cost of the same scenario on Sia.
+
+Scenario: Upload 1 TB of files at the beginning of a storage period, download at the end.
+
+On storage providers like S3 or GCS, you could predict the costs pretty accurately with the following formula:
 
 ```text
 total_cost = (file_size * upload_cost) +
@@ -124,9 +142,9 @@ total_cost = (file_size * upload_cost) +
              (file_size * download_cost)
 ```
 
-In reality, there are some additional cost per API call, but these are negligible. I believe for a load test similar to the ones I ran on Sia, the additional costs of API calls on S3 would be a few cents. talking costs of a few cents for usage similar to my load tests.
+Again, I'm neglecting per-request costs and maybe a few other minor costs, but that formula would probably get you to within 5% of your actual bill. All variables are known a priori.
 
-https://therub.org/2015/11/18/glacier-costlier-than-s3-for-small-files/
+Now I'll try to create a formula for Sia:
 
 ```text
 contract_size = file_size * (1 / storage_efficiency)
@@ -136,30 +154,49 @@ total_cost = (contract_size * upload_cost) +
              ((contract_count + contract_renewals) * contract_fee)
 ```
 
+Already, it's much more complex a formula than with traditional providers. But the worst part is that the user doesn't know any of the values of these variables ahead of time. There are nine different variables in that formula. The only one that the user knows in advance is `file_size`.
+
 Storage efficiency depends on the degree of replication (by default, 3x), the distribution of file sizes in your data, and how stable your hosts are.
 
 
 ### Fees represent a high proportion of cost
 
-I never looked too deeply into contract fees, but I assumed they were a small percentage of 
+Before I ran this test, I assumed Sia's fees were pretty small.
 
-| Test case | Fee spending (incorrect accounting) | Total spending (incorrect accounting) | Fee % |
+When you use Sia-UI to set a storage allowance, it shows fees as . As explained [above](#cost-estimates-are-wildly-inaccurate), fees are the cost for which Sia makes the poorest predictions. In these tests, fees were 10-20x more than what Sia's price API predicted.
+
+I'm using Sia's 
+
+| Test case | Fee spending (incorrect accounting) | Total spending (incorrect accounting) | Fees as % of total spending |
 |-------------|-----------------|----------------|--------|
 | [Worst-case](/load-test-1) | 697.6 SC | 1,593.1 SC | 43.8% |
 | [Real data](/load-test-2) | 640.6 SC | 2,243.8 SC | 28.5% |
-| [Best-case](/load-test-3) | 628.6 SC | 1,473.3 | 42.7% |
+| [Best-case](/load-test-3) | 628.6 SC | 1,473.3 SC | 42.7% |
 
 ### Fees are variable, not fixed
 
-Increase with the amount of data uploaded, increase with the size of the allowance.
+I thought that contract fees were independent of the value of the contract. With Bitcoin, a 1 BTC transaction costs the same in fees as a 10 BTC transaction. So I assumed that a 500 SC Sia renter allowance would cost the same in fees as a 5000 SC allowance. This is not the case.
+
+Before I began official testing, I did an practice run of my test script [using a 500 SC wallet](https://redd.it/7y3lzg). Comparing the contract fees for the initial set of 50 contracts, there are clearly big differences, both in absolute spending and as percentage of total spending.
+
+| Allowance | Contract fees | Total contract spending | Fees as % of contract costs |
+|-----------|-----|-------------|----------------------------|
+| 500 SC | 122.5 SC | 166.7 SC | 73.5% |
+| 5000 SC | 454.4 SC | 1666.7 |  27.3% |
 
 ### Contract spending is unintuitive
 
 Uploads with too high a redundancy.
 
-## Improving tests
+* Misconception 2: Contract fees are paid once at the start of a contract period and not paid again until the contract completes.
 
-### Run load tests on a cloud server
+I thought that fees 
+Increase with the amount of data uploaded, increase with the size of the allowance.
+
+
+## Improving load tests
+
+### Run on a cloud server
 
 I originally designed the tests to run on my home desktop because I wanted to simulate as little as possible. The obvious alternative is a virtual cloud server, but I was concerned that virtualization might introduce unexpected side effects to the test. 
 
@@ -169,7 +206,7 @@ Having run the tests on my personal infrastructure, I realize that my personal i
 
 In retrospect, I think that the costs outweigh the benefits. I recommend that researchers interested in measuring my 
 
-I've adjusted sia_load_tester to make this easy. Now you can specify a `--copy_count` flag to sia_load_tester. Using this flag, you can tell Sia to cycle through the input files N times. So if you have 50 GiB of files, you can specify `--copy_count=205` so that sia_load_tester reuploads that set of files 205x to simulate 10 TiB of input data.
+I've adjusted sia_load_tester to make this easy. Now you can specify a `--dataset_copies` flag to sia_load_tester. Using this flag, you can tell Sia to cycle through the input files N times. So if you have 50 GiB of files, you can specify `--dataset_copies=205` so that sia_load_tester reuploads that set of files 205x to simulate 10 TiB of input data.
 
 ### Bandwidth is a first-class citizen
 
@@ -187,21 +224,47 @@ I propose that a more realistic minimum is 50 Mbps of file data bandwidth averag
 
 One of the surprising outcomes of the load test was that the real data scenario outperformed the worst-case scenario.
 
-Due to the previous point about bandwidth, Sia performs much better with a small set of very large files as opposed to a large set of ~40 MiB files. A better best-case scenario would probably use files that are ~20 GiB each (512x Sia's chunk size).
+Due to the previous point about bandwidth, Sia performs much better with a small set of very large files as opposed to a large set of ~40 MiB files. A better representation of Sia's best-case performance would use files that are ~20 GiB each (or, more precisely, 21474693120 bytes so that they're exactly 512x Sia's chunk size).
 
 ### Increase file sizes for worst-case scenario
 
 I want to take a moment to emphasize the importance of this test.
 
+I'm stuck either spending months implementing my own file-repacking layer or explaining to my users why I'm charging them $350M per TB/month for text files, but only $4.50 per TB/month for large video files.
+
 You could build a file-repacking layer on top of it.
+
+https://therub.org/2015/11/18/glacier-costlier-than-s3-for-small-files/
 
 ### Automate, automate, automate
 
-TODO
+This test needs to be as automatic as possible. The more that's automated, the less margin there is for human error and the easier it is for different researchers to reproduce results.
+
+I tried to automate as much as possible, but it's hard to know what needs automating until you actually follow a process end-to-end. There are two key parts that require more automation: provisining and analysis.
+
+By provisioning, I mean:
+
+  * Installing Sia
+  * Installing test tools
+  * Funding the Sia wallet
+  * Generating dummy data
+
+I performed these steps manually for each test and documented the commands in the sia_load_tester README, but it would be better to capture this logic in a single script or Ansible playbook (using ansible-role-sia, of course).
+
+The analysis stage needs better automation for:
+
+* Creating data visualizations from sia_metrics_collector's output
+* Calculating relevant metrics ($/TB, price estimate accuracy, etc.) from the outputs of sia_load_tester and sia_metrics_collector.
+
+For the load test, I created a [Google Sheets template](https://docs.google.com/spreadsheets/d/1ep-m_2K5hY9nF_D4TgKyGpp9arB6F3xPA7PJwQnskeg/edit?usp=sharing) to calculate these metrics and create visualizations. This was an okay v1 solution, but is not a good long term solution because it requires the test operator to do a lot of ad-hoc calculations and manually manually upload CSVs to Sheets any time they want to check progress.
+
+A better solution would be a web app that runs on the test system so that the test operator can view test progress and results through a browser.
 
 ## Why I'm not continuing to test Sia
 
-I never intended to run these on a regular basis. I wanted to demonstrate that these metrics are valuable. I'd go so far as to say that tracking these metrics is *necessary*.
+I originally conceived of these tests because I was considering building a software company on top of Sia. I couldn't decide whether any of my business ideas were feasible without hard data about Sia's capabilities.
+
+I wanted to demonstrate that these metrics are valuable. I'd go so far as to say that this type of measurement is *necessary* if Sia hopes to move from enthusiasts to production usage by real businesses.
 
 There is a group of volunteers discussing a plan for running these tests on an ongoing basis. If you're interested in helping these efforts, email me at michael@spaceduck.io and I'll put you in touch with them.
 
