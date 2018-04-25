@@ -11,7 +11,7 @@ tags:
 permalink: "/load-test-wrapup/"
 ---
 
-I completed testing on all scenarios from the load test. I published a write-up following each test, but I wanted to do one final summary to cover the tests at a higher level. I cover the high level takeaways from the test and how I think the Sia community should test Sia going forward.
+For the past three months, I performed various load tests on Sia and published a report after each to describe the results. I completed my test plan, but now I'd like to look back on the tests at a high level to share what I learned about Sia and how to test it.
 
 ## Result summary
 
@@ -41,7 +41,7 @@ I completed testing on all scenarios from the load test. I published a write-up 
 * RAM: 32 GB
 * Local disk (for Sia metadata): 512 GB SSD
 * Network storage (for input files): Synology DS412+ (4 TB free)
-* Internet connection: Verizon FiOS home (940 Mbps download / 880 Mbps upload)
+* Internet connection: Verizon FiOS home - 940 Mbps download / 880 Mbps upload
 
 ## What I learned about Sia
 
@@ -175,9 +175,13 @@ I'm using Sia's
 
 ### Fees are variable, not fixed
 
-I thought that contract fees were independent of the value of the contract. With Bitcoin, a 1 BTC transaction costs the same in fees as a 10 BTC transaction. So I assumed that a 500 SC Sia renter allowance would cost the same in fees as a 5000 SC allowance. This is not the case.
+I thought that contract fees were independent of the value of the contract. With Bitcoin, a 1 BTC transaction costs the same in fees as a 10 BTC transaction. So I assumed that a 500 SC Sia renter allowance would cost the same in fees as a 5000 SC allowance.  This is what both Sia-UI and the `/renter/prices` API claim: you pay the same flat fee regardless of allowance amount. This is not the case.
 
-Before I began official testing, I did an practice run of my test script [using a 500 SC wallet](https://redd.it/7y3lzg). Comparing the contract fees for the initial set of 50 contracts, there are clearly big differences, both in absolute spending and as percentage of total spending.
+Before I began official testing, I did an practice run of my test script [using a 500 SC wallet](https://redd.it/7y3lzg). When I began official testing with a 5000 SC wallet, I was surprised to see Sia spend almost four times the contract fees as my 500 SC test.
+
+As the test progresses, Sia's accounting becomes unreliable (described [above](#cost-accounting-is-unreliable)), but at the very beginning of the renter period when Sia forms its initial set of 50 contracts, its accounting is consistent.
+
+Comparing the 500 SC test to the 5000 SC test, there are clearly big differences, both in absolute fee costs and in fees as percentage of total spending.
 
 | Allowance | Contract fees | Total contract spending | Fees as % of contract costs |
 |-----------|-----|-------------|----------------------------|
@@ -186,6 +190,16 @@ Before I began official testing, I did an practice run of my test script [using 
 
 ### Contract spending is unintuitive
 
+This test showed me that my mental model of Sia's contract management was incorrect. I thought that Sia purchased 50 contracts for the duration of the contract period (12 weeks, in the load test), and then used these 50 contracts until they funds associated with them were exhausted or the associated hosts went offline.
+
+This is not how Sia manages contracts. I don't fully understand what Sia's contract logic is, and I don't see the behavior documented anywhere, but I can glean a bit from the test results.
+
+Sia seems to optimize for performance instead of costs. When I set an allowance of 5000 SC, it doesn't spend 5000 SC on contracts. Instead, it spends 1/3 of this on contracts and keeps the remaining 2/3 as reserves to reinvest in contracts that perform well.
+
+When Sia finds a host that performs well, it purchases additional contracts from that host [well before its other contracts are exhausted](https://github.com/NebulousLabs/Sia/issues/2769). Sia represents this as reinvestment, so the contract count doesn't increase, but Sia pays the same amount in fees as if it had purchased a new, separate contract.
+
+Sia always buys contracts in increments of 1/150th of the allowance. Even if it has reinvested in a contract five times, it keeps reinvesting tiny amounts rather than increasing the spending amount to reduce the percentage lost to fees.
+
 Uploads with too high a redundancy.
 
 * Misconception 2: Contract fees are paid once at the start of a contract period and not paid again until the contract completes.
@@ -193,6 +207,13 @@ Uploads with too high a redundancy.
 I thought that fees 
 Increase with the amount of data uploaded, increase with the size of the allowance.
 
+### File replication seems overly aggressive
+
+| Test case | Min Redundancy | Max Redundancy | Median Redundancy | Mean Redundancy |
+|------------ |------|-------|----------|---------|
+| [Worst-case](/load-test-1) | 3.0x | 11.3x | 5.3x | 5.2x |
+| [Real data](/load-test-2) | 0.0x | 5.2x | 2.5x | 2.5x |
+| [Best-case](/load-test-3) | 3.0x | 7.3x | 4.1x | 4.0x |
 
 ## Improving load tests
 
