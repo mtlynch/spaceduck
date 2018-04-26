@@ -57,7 +57,7 @@ I still see users report crashes on versions 1.3.1 and 1.3.2. Anecdotally, the c
 
 Sia has always listed low storage costs as one of their competitive advantages.  A 50% reduction is significant, but it's not close to Sia's frequently cited claim of "90% less than incumbent cloud storage providers."
 
-I found that in practice, taking into account fees and extra costs from replication, Sia remains low-cost, but the savings are not as dramatic as advertised.
+I found that in practice, after taking into account fees and extra costs from replication, Sia remains low-cost, but the savings are not as dramatic as advertised.
 
 The test with the best cost efficiency was the real data test, which achieved $4.51 per TB/month. This is certainly lower than Amazon S3's standard storage class ($23 per TB/month), but the comparison to S3 isn't quite realistic. AWS doesn't have an offering that's similar to Sia in performance. Standard S3 is much more performant than Sia, whereas Amazon Glacier is much less performant. Neither comparison quite works.
 
@@ -84,7 +84,7 @@ This isn't exciting in itself because cloud providers typically charge zero for 
 
 ### Cost accounting is unreliable
 
-Sia reports its spending through both its [`renter` APIs](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter) and its [`wallet` APIs](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#wallet). Unfortunately, these two APIs [contradict each other](https://github.com/NebulousLabs/Sia/issues/2772). The amount of money the `renter` APIs report in contracts is less than the amount that the `wallet` APIs report as deducted from the Sia wallet.
+Sia reports its spending through both its [`renter`](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter) and its [`wallet`](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#wallet) APIs. Unfortunately, they [contradict each other](https://github.com/NebulousLabs/Sia/issues/2772).
 
 | Test case | Spending according to `/renter/contracts` | Spending according to `/wallet` | Discrepancy |
 |-------------|-----------------------------------------------------|----------------------------------------|--------|
@@ -92,9 +92,9 @@ Sia reports its spending through both its [`renter` APIs](https://github.com/Neb
 | [Real data](/load-test-2) | 2,866.7 SC | 5,000.0  SC | 2,133.3 SC |
 | [Best-case](/load-test-3) | 2,833.3 SC | 3,200.0 SC | 366.7 SC |
 
-For the purposes of these tests, I treated the `wallet` API as the ground truth for spending.
+For the purposes of my reports, I treated the `wallet` API as the ground truth for spending.
 
-Sia also reports spending metrics that are [logically impossible](https://github.com/NebulousLabs/Sia/issues/2768). In each of the tests, Sia's accounting showed increases and *decreases* in total storage spending over time. Decreases in total storage spending shouldn't be possible, because when Sia spends money on a storage contract, that money is spent and can't go down.
+Sia also reports spending metrics that are [logically impossible](https://github.com/NebulousLabs/Sia/issues/2768). In each of the tests, Sia's accounting showed increases and *decreases* in total storage spending over time. Decreases in total storage spending shouldn't be possible. When Sia spends money on a storage contract, the expenditure is permanent so total spending can never decrease.
 
 ### Cost estimates are wildly inaccurate
 
@@ -183,7 +183,7 @@ As the test progresses, Sia's accounting becomes unreliable (described [above](#
 
 Comparing the 500 SC test to the 5000 SC test, there are clearly big differences, both in absolute fee costs and in fees as percentage of total spending.
 
-| Allowance | Contract fees | Total contract spending | Fees as % of contract costs |
+| Allowance | Contract fees<br>(contract creation time) | Total contract spending<br>(contract creation time) | Fees as % of contract costs |
 |-----------|-----|-------------|----------------------------|
 | 500 SC | 122.5 SC | 166.7 SC | 73.5% |
 | 5000 SC | 454.4 SC | 1666.7 |  27.3% |
@@ -207,7 +207,13 @@ Uploads with too high a redundancy.
 I thought that fees 
 Increase with the amount of data uploaded, increase with the size of the allowance.
 
-### File replication doesn't add up
+### File replication is bizzare
+
+First, a bit of background on how Sia's replication works. Sia stores files redundantly with a 10 of 30 [Reed-Solomon encoding](https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction). More specifically, it divides each file into chunks of ~40 MiB, then splits each of those chunks into 30 fragments of ~4 MiB each. Sia can reconstruct the original data chunk using any 10 of those 30 fragment. Sia uploads each fragment to a different host so that if the host disappears, Sia can still recover the file from the remaining 29 hosts.
+
+Both Sia-UI and Sia's command-line interface display a "Redundancy" value for each file in terms of a multiplier, like 3x or 3.5x. This multiplier is simply the number of total file fragments uploaded divided by the number of fragments needed to reconstruct the file. A healthy file has a multiplier of 30/10=3.0x. If two of the hosts holding fragments go offline, the redundancy will drop to (30-2)/10=2.8x. The redundancy can increase above 3.0x if a host goes offline, then Sia re-uploads its fragment to a new, healthy host, then the original host comes back online. That would result in a redundancy of 31/10=3.1x.
+
+I calculated aggregate statistics on each file's redundancy in each of the test cases and found inexplicable numbers:
 
 | Test case | Min Redundancy | Max Redundancy | Median Redundancy | Mean Redundancy |
 |------------ |------|-------|----------|---------|
@@ -215,23 +221,33 @@ Increase with the amount of data uploaded, increase with the size of the allowan
 | [Real data](/load-test-2) | 0.0x | 5.2x | 2.5x | 2.5x |
 | [Best-case](/load-test-3) | 3.0x | 7.3x | 4.1x | 4.0x |
 
-This doesn't answer the more pressing question of how redundancy reached such high levels in the first place? Sia distributes files with 10 of 30 Reed-Solomon encoding. In other words, it breaks each file into chunks of ~40 MiB, then splits those chunks into 30 fragments of 4 MiB each. Sia can reconstruct the original data chunk using any 10 of those 30 pieces.
+The craziest number is the 11.3x redundancy in the worst-case test. It means that Sia went through the process I described above where a host goes offline, Sia redistributes its fragment to a new host, then the original host comes back online. Except an 11.3x redundancy means this happened **83 times**. That test only had contracts with 60 hosts, so going through this process 83 times seems illogical.
 
-If a file reached 11.3x redundancy, that implies that Sia uploaded 113 data fragments for that file. This further implies that 
+I [filed a bug](https://github.com/NebulousLabs/Sia/issues/2813), which the dev team resolved with this note:
+
+>Starting from 1.3.2 Sia will only count healthy renewable contracts towards file redundancy. That way we should never see a >3x redundancy for files uploaded with 1.3.2 or higher.
+
+This perhaps prevents users from being confused, but unfortunately doesn't address the root cause: how could replication have reached such absurdly high levels in the first place?
+
+The real data case shows suspiciously *low* redundancy. I would expect a handful of files to drop below 3.0x redundancy from time to time, but in that test, the median redundancy was 2.5x. This means that most files were in an unhealthy state and hadn't yet been repaired despite the fact that there were plenty of unspent funds in existing contracts.
 
 ## Improving load tests
 
+This series of tests was the first rigorous, public test of Sia's performance. It yielded many interesting findings, but because it was the first test of its kind, there were many shortcomings I didn't anticipate when I designed it.
+
+Having gone through the testing process end-to-end, I'd like to share some thoughts on how the Sia community can improve future testing.
+
 ### Run on a cloud server
 
-I originally designed the tests to run on my home desktop because I wanted to simulate as little as possible. The obvious alternative is a virtual cloud server, but I was concerned that virtualization might introduce unexpected side effects to the test. 
+I originally designed the tests to run on my home desktop because I wanted to minimize emulation. I was concerned that running the test from a Docker container or VM might introduce unexpected side effects to the test. 
 
-I also wanted to test Sia with actual data instead of synthetic files. That presents challenges in a cloud environment. For example, in the test case where I used XX TiB of video files, Sia uploaded XX TiB just 
+I also wanted to test Sia with actual data instead of synthetic files. That presents challenges in a cloud environment. For example, storing 5 TB of test data on Google Cloud Storage would cost $102.40 per month. And then if I used Google Compute Engine to run the test, I'd pay ~$100 for each TB of data uploaded to Sia.
 
-Having run the tests on my personal infrastructure, I realize that my personal infrastructure has its own signicant drawbacks. I only have a single desktop, which meant that I had to run the tests serially rather than in parallel, which substantially increased the total duration of these tests. It also meant that my computer usage unrelated to Sia affected the tests. Notably, in test #3, my desktop crashed and affected test results. In other tests
+Having run the tests on my personal infrastructure, I realize that my personal infrastructure has its own signicant drawbacks. I only have a single desktop, which meant that I had to run the tests serially rather than in parallel, which substantially increased the total duration of these tests. It also meant that my computer usage unrelated to Sia potentially affected the tests. Notably, in test #3, my desktop crashed and caused a stark change in Sia's behavior.
 
-In retrospect, I think that the costs outweigh the benefits. I recommend that researchers interested in measuring my 
+In retrospect, I think that the costs outweigh the benefits. I recommend that researchers interested in carrying these tests forward run tests from a cloud VPS provider that offers unmetered network bandwidth.
 
-I've adjusted sia_load_tester to make this easy. Now you can specify a `--dataset_copies` flag to sia_load_tester. Using this flag, you can tell Sia to cycle through the input files N times. So if you have 50 GiB of files, you can specify `--dataset_copies=205` so that sia_load_tester reuploads that set of files 205x to simulate 10 TiB of input data.
+The problem is that thes providers generally don't provide options for local disks above 1 TB. To work around this, I've added a `--dataset_copies` flag to sia_load_tester. Using this flag, the test oprator can tell Sia to cycle through the input files N times. So if you have 50 GiB of files, you can specify `--dataset_copies=205` so that sia_load_tester reuploads that set of files 205x to simulate 10 TiB of input data.
 
 ### Bandwidth is a first-class citizen
 
