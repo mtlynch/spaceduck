@@ -251,13 +251,19 @@ The problem is that thes providers generally don't provide options for local dis
 
 ### Bandwidth is a first-class citizen
 
-The biggest metric I failed to account for was bandwidth. I knew I'd be running on my home infrastructure where my ISP does not guarantee me a particular bandwidth and I'm also doing other stuff at the same time like watching streaming 4K video, which would affect Sia's available bandwidth.
+The biggest metric I failed to account for was bandwidth. I knew I couldn't get a clean measure of bandwidth since I'd be doing other things over the course of the test that could compete for bandwidth like downloading files or watching 4K streaming videos on Netflix. So I didn't give much thought to measuring bandwidth carefully accurately.
 
-Having run the tests, I see that bandwidth matters a great deal.
+I realized bandwidth matters a great deal for Sia. It only begins to be cost effective after ~1 TB of file data, but that's useless if it can only upload it at 5 Mbps. There are use-cases that Sia can support if average file upload bandwidth is >100 Mbps that aren't viable at 50 Mbps, so it's important to get a clean measure of actual file data bandwidth.
+
+The tests also didn't measure Sia's total bandwidth usage. I approximated it with [absolute bandwidth](/load-test-3/#file-data-bandwidth-vs-absolute-bandwidth), but that was based on Sia's reporting, which is not reliable. It also excludes Sia's bandwidth overhead from non-file activity, such as just participating in the Sia network. Most software deployments have metered. If Sia uploads at a file data bandwidth of 5 Mbps but requires 50 Mbps of absolute bandwidth on the wire to achieve that, that's important to know. Future iterations of this test should measure absolute bandwidth at the 
 
 ### Set more realistic bandwidth minimums
 
-I set the minimum bandwidth to 3 Mbps, which is far too low. I also based the minimum on absolute file bandwidth instead of file data bandwidth. In other words, the test considers Sia to be making useful progress even if it does nothing but upload the same file over and over again until it's at 11x redundancy.
+In the test plan, I specified that the test terminates if Sia stops making upload progress for at least one hour, where "progress" was defined as >= 3 Mbps of absolute bandwidth. This was far too low and tracked the wrong metric.
+
+Instead, the bandwidth minimum should be in terms of file data bandwidth, not absolute bandwidth. Sia could be uploading at 1 Gbps but that's not useful if it's using the bandwidth just to upload the same file to 11.3x redundancy. File data bandwidth measures what a real consumer would care about: the time it takes to upload some set of files to Sia.
+
+3 Mbps was also far too lowa minimum. At 3 Mbps, it would take 33 days just to upload 1 TB of file data. I can't imagine any realistic use-case where the consumer would be willing to tolerate a bandwidth so low.
 
 I propose that a more realistic minimum is 50 Mbps of file data bandwidth averaged over the last 24 hours (equivalent to uploading ~500 GiB per day).
 
@@ -265,9 +271,15 @@ I propose that a more realistic minimum is 50 Mbps of file data bandwidth averag
 
 One of the surprising outcomes of the load test was that the real data scenario outperformed the worst-case scenario.
 
-Due to the previous point about bandwidth, Sia performs much better with a small set of very large files as opposed to a large set of ~40 MiB files. A better representation of Sia's best-case performance would use files that are ~20 GiB each (or, more precisely, 21474693120 bytes so that they're exactly 512x Sia's chunk size).
+It turns out that Sia performs much better with a small set of very large files than a large set of ~40 MiB files. A better representation of Sia's best-case performance would use files that are ~20 GiB each (or, more precisely, 21474693120 bytes so that they're exactly 512x Sia's chunk size, maximizing Sia's file packing efficiency).
 
 ### Increase file sizes for worst-case scenario
+
+To test Sia's performance in its worst-case scenario, I uploaded thousands of 1-byte files. It was interesting to see the results, but the resulting metrics were so extreme to the point that they're basically meaningless.
+
+Some readers gave feedback that this test should be ignored entirely and Sia should only be tested with the large files it's currently optimized for. I think that would be a mistake. It would be like reporting the performance characteristics of a car when it's driven at 120 mph. That might be the car's ideal performance speed, but real world users want to know how it performs in real world conditions.
+
+I propose adjusting the minimum file size to be 4 KB.
 
 I want to take a moment to emphasize the importance of this test.
 
