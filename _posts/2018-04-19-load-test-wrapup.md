@@ -207,13 +207,17 @@ Uploads with too high a redundancy.
 I thought that fees 
 Increase with the amount of data uploaded, increase with the size of the allowance.
 
-### File replication seems overly aggressive
+### File replication doesn't add up
 
 | Test case | Min Redundancy | Max Redundancy | Median Redundancy | Mean Redundancy |
 |------------ |------|-------|----------|---------|
 | [Worst-case](/load-test-1) | 3.0x | 11.3x | 5.3x | 5.2x |
 | [Real data](/load-test-2) | 0.0x | 5.2x | 2.5x | 2.5x |
 | [Best-case](/load-test-3) | 3.0x | 7.3x | 4.1x | 4.0x |
+
+This doesn't answer the more pressing question of how redundancy reached such high levels in the first place? Sia distributes files with 10 of 30 Reed-Solomon encoding. In other words, it breaks each file into chunks of ~40 MiB, then splits those chunks into 30 fragments of 4 MiB each. Sia can reconstruct the original data chunk using any 10 of those 30 pieces.
+
+If a file reached 11.3x redundancy, that implies that Sia uploaded 113 data fragments for that file. This further implies that 
 
 ## Improving load tests
 
