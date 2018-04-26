@@ -193,6 +193,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-responsive-image
+  - jekyll-archives
 
 # Theme
 # ---------------------------------------------------------------------------------------
@@ -279,3 +280,12 @@ media_renditions:
       - "(max-width: 52em) 672px"
       - "(max-width: 96em) 840px"
       - "100vw"
+
+# jekyll-archives configurations
+jekyll-archives:
+  enabled:
+    - 'tags'
+  layouts:
+    tag: 'tag-list'
+  permalinks:
+    tag: '/tag/:name/'
