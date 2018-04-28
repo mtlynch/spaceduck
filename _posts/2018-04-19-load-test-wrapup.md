@@ -11,7 +11,7 @@ tags:
 permalink: "/load-test-wrapup/"
 ---
 
-For the past three months, I performed various load tests on Sia and published a report after each to describe the results. I completed my test plan, but now I'd like to look back on the tests at a high level to share what I learned about Sia and how to test it.
+For the past three months, I performed a series of load tests on Sia. I published reports to describe each test individually, but now I'd like to look back on the tests at a high level to share what I learned about Sia and how the community can better measure its performance.
 
 ## Result summary
 
@@ -51,15 +51,17 @@ I've been using Sia for almost two years now. I like to push Sia's limits and ru
 
 Sia didn't crash once during these tests. Cumulatively, Sia ran for 48.6 days and processed 91,536 files without a single crash.
 
-I still see users report crashes on versions 1.3.1 and 1.3.2. Anecdotally, the crashes seem to be mostly related to Sia exhausting memory. In this load test, Sia was running on a system with 32 GB of RAM, so RAM was harder to exhaust. In addition, the test automation kept Sia limited to a maximum of five simultaneous uploads, which may have kept memory demands in check.
+I still see users report crashes on versions 1.3.1 and 1.3.2. Anecdotally, most of the crashes seem related memory exhaustion. In my load test, Sia was running on a system with 32 GB of RAM, so memory was harder to exhaust. In addition, the test script limited Sia to five simultaneous uploads, which may have kept memory demands in check.
 
 ### Storage isn't that cheap
 
-Sia has always listed low storage costs as one of their competitive advantages.  A 50% reduction is significant, but it's not close to Sia's frequently cited claim of "90% less than incumbent cloud storage providers."
+Sia has always listed low storage costs as one of their competitive advantages. The [Sia website](https://sia.tech) has for the past few years listed storage costs as $2 per TB/month, claiming this is 90% less expensive than incumbent providers.
 
-I found that in practice, after taking into account fees and extra costs from replication, Sia remains low-cost, but the savings are not as dramatic as advertised.
+{% include image.html file="website-estimate.png" alt="Price estimate on Sia website" fig_caption="Storage price estimate on Sia website" img_link="true" %}
 
-The test with the best cost efficiency was the real data test, which achieved $4.51 per TB/month. This is certainly lower than Amazon S3's standard storage class ($23 per TB/month), but the comparison to S3 isn't quite realistic. AWS doesn't have an offering that's similar to Sia in performance. Standard S3 is much more performant than Sia, whereas Amazon Glacier is much less performant. Neither comparison quite works.
+I found that after taking into account Sia's fees and extra costs from replication, Sia remains low-cost, but the savings are not as dramatic as advertised.
+
+The test with the best cost efficiency was the [real data test](/load-test-2), which achieved $4.51 per TB/month. This is certainly lower than Amazon S3's standard storage class ($23 per TB/month), but the comparison to S3 isn't quite realistic. AWS doesn't have an offering that's similar to Sia in performance. Standard S3 is much more performant than Sia, whereas Amazon Glacier is much less performant.
 
 Google Cloud Storage's (GCS) nearline storage class is probably the closest comparison in terms of performance. It's $10 per TB/month. Further, there are low-cost centralized providers like Backblaze and [Wasabi](https://wasabi.com/) that offer storage for $5 per TB/month.
 
@@ -69,14 +71,16 @@ Google Cloud Storage's (GCS) nearline storage class is probably the closest comp
 
 I'm excluding some costs for this comparison that I consider negligible:
 
-* I exclude the frictional costs involved in acquiring Siacoin. To use Sia, the user must convert fiat currency to a mainstream cryptocurrency such as Bitcoin or Ethereum, then trade that cryptocurrency for Siacoin. Each conversion and coin transfer incurs a small frictional cost.
-* For traditional storage providers, I'm neglecting per-request costs, which some providers charge, but generally account for \<1% of costs in normal usage.
+* I exclude the frictional costs of acquiring Siacoin.
+  * To use Sia, the user must convert fiat currency to a mainstream cryptocurrency such as Bitcoin or Ethereum, then trade that cryptocurrency for Siacoin. Each conversion and coin transfer incurs a small frictional cost.
+* I exclude per-request costs.
+  * Some traditional providers charge fees per HTTP request, but these charges generally account for \<1% of costs in normal usage.
 
 ### Upload bandwidth is inexpensive
 
-One surprising result was how inexpensive upload bandwidth was. For the real data and best-case tests, upload bandwidth was around $0.40-$0.70 per TB of file data uploaded (I'll explain the inexact numbers [below](#cost-accounting-is-unreliable)).
+One surprising result was how inexpensive upload bandwidth was. For the [real data](/load-test-2) and [best-case tests](/load-test-3), upload bandwidth was around $0.40-$0.70 per TB of file data uploaded.
 
-This isn't exciting in itself because cloud providers typically charge zero for inbound data transfers. It does, however, bode well for download bandwidth costs. I didn't measure downloads in this test, but if they're within even an order of magnitude of upload bandwidth, it would give Sia a huge price advantage over traditional storage providers:
+This isn't exciting in itself because cloud providers typically charge zero for inbound data transfers. It does, however, bode well for download bandwidth costs. I didn't measure downloads in this test, but if they're within even an order of magnitude of upload bandwidth, it would give Sia a huge price advantage over traditional storage providers, most of whom charge a premium for bandwidth:
 
 |                                                                          | Amazon S3<br>(Standard) | GCS Nearline | Azure | Backblaze B2 |
 |-----------------------------------------|---------------------------|-------------------|--------|------------------|
@@ -84,7 +88,7 @@ This isn't exciting in itself because cloud providers typically charge zero for 
 
 ### Cost accounting is unreliable
 
-Sia reports its spending through both its [`renter`](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter) and its [`wallet`](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#wallet) APIs. Unfortunately, they [contradict each other](https://github.com/NebulousLabs/Sia/issues/2772).
+Sia reports its spending through both its [`renter`](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter) and its [`wallet`](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#wallet) APIs. Unfortunately, they [contradict each other](https://github.com/NebulousLabs/Sia/issues/2772). The wallet APIs report that Sia is spending money, but the spends don't match up with purchases that the `renter` APIs report:
 
 | Test case | Spending according to `/renter/contracts` | Spending according to `/wallet` | Discrepancy |
 |-------------|-----------------------------------------------------|----------------------------------------|--------|
@@ -94,13 +98,11 @@ Sia reports its spending through both its [`renter`](https://github.com/Nebulous
 
 For the purposes of my reports, I treated the `wallet` API as the ground truth for spending.
 
-Sia also reports spending metrics that are [logically impossible](https://github.com/NebulousLabs/Sia/issues/2768). In each of the tests, Sia's accounting showed increases and *decreases* in total storage spending over time. Decreases in total storage spending shouldn't be possible. When Sia spends money on a storage contract, the expenditure is permanent so total spending can never decrease.
+Sia also reports spending metrics that are [logically impossible](https://github.com/NebulousLabs/Sia/issues/2768). In each of the tests, Sia's accounting showed increases and *decreases* in total storage spending over time. When Sia spends money on a storage contract, the expenditure is permanent so total spending should never decrease.
 
 ### Cost estimates are wildly inaccurate
 
-Sia offers a [`/renter/prices` API](https://github.com/NebulousLabs/Sia/blob/master/doc/api/Renter.md#json-response-4) that Sia-UI and command-line client rely on to provide cost estimates before you store your data on Sia.
-
-Because of Sia's errors in accounting, I treated the wallet's remaining balance as the ground-truth measure of how much Sia spent in contracts and scaled by a constant factor.
+Sia offers a [`/renter/prices` API](https://github.com/NebulousLabs/Sia/blob/master/doc/api/Renter.md#json-response-4) that Sia-UI and the command-line client use to provide cost estimates before you store your data on Sia. I found that its estimates drastically understimated the actual costs in practice:
 
 #### Real data scenario
 
@@ -122,19 +124,23 @@ Because of Sia's errors in accounting, I treated the wallet's remaining balance 
 
 \* Scaling Sia's reported costs by 1.13x to correct for accounting bugs.
 
-I've omitted the worst-case scenario from this comparison because the numbers are so high that they're meaningless.
+To work around Sia's previously mentioned [accounting bugs](#cost-accounting-is-unreliable), I treated Sia's `wallet` API as authoritative and scaled the numbers from its `renter` API by a constant factor to match. So in the case of the best-case scenario test, the `renter` reported 2,866.7 SC in total spending, while the `wallet` reported 5000 SC in total spending. I treated the `wallet` as correct and scaled the subcomponents of the renter cost by 5000 / 2866.7 = 1.74x to reconcile the difference:
 
-Sia-UI has a separate price estimation bug that exacerbates the incorrect estimates, but ironically, this additional bug makes Sia's estimates more accurate.  Sia-UI uses the overly optimistic pricesthe incorrect prices from the `/renter/prices` API and performs an incorrect calculation as [Sia-UI uses API prices incorrectly](https://github.com/NebulousLabs/Sia-UI/issues/775).
+| Cost | Raw | Corrected |
+|-------|-------|--------------|
+| Upload | 94.3 SC | 164.1 SC |
+| Storage | 1,508.8 SC | 2625.3 SC |
+| Fees | 640.6 SC | 1114.6 SC |
+| Unused contract funds | 622.9 SC | 1083.8 SC |
+| Total | 2,866.7 SC | 5000 SC |
+
+Sia-UI has a separate price estimation bug that exacerbates the incorrect estimates from the API. Sia-UI takes the incorrect prices from the renter API and [performs an incorrect calculation](https://github.com/NebulousLabs/Sia-UI/issues/775) to give an even more inaccurate estimate of costs on the network.
 
 ### Costs are complex and unpredictable
 
 In addition to Sia's inaccurate estimates, Sia's costs are so complex and depend on so many unknown factors that it's impossible to predict Sia's costs in advance.
 
-To explain, I'll compare the costs of a simple scenario on traditional providers, then attempt to calculate the cost of the same scenario on Sia.
-
-Scenario: Upload 1 TB of files at the beginning of a storage period, download at the end.
-
-On storage providers like S3 or GCS, you could predict the costs pretty accurately with the following formula:
+On storage providers like S3 or GCS, you can predict costs pretty accurately with the following formula:
 
 ```text
 total_cost = (file_size * upload_cost) +
@@ -142,9 +148,9 @@ total_cost = (file_size * upload_cost) +
              (file_size * download_cost)
 ```
 
-Again, I'm neglecting per-request costs and maybe a few other minor costs, but that formula would probably get you to within 5% of your actual bill. All variables are known a priori.
+I'm neglecting per-request costs and maybe a few other minor costs, but that formula would probably get you to within 5% of your actual bill. All variables are known a priori.
 
-Now I'll try to create a formula for Sia:
+Now, I'll try to create a formula for estimating costs on Sia:
 
 ```text
 contract_size = file_size * (1 / storage_efficiency)
@@ -154,18 +160,19 @@ total_cost = (contract_size * upload_cost) +
              ((contract_count + contract_renewals) * contract_fee)
 ```
 
-Already, it's much more complex a formula than with traditional providers. But the worst part is that the user doesn't know any of the values of these variables ahead of time. There are nine different variables in that formula. The only one that the user knows in advance is `file_size`.
+Already, it's much more complex than with traditional providers.
 
-Storage efficiency depends on the degree of replication (by default, 3x), the distribution of file sizes in your data, and how stable your hosts are.
+The worst part is that so many of the variables are unknown. There are nine different variables in that formula. The only one that the user knows in advance is `file_size`. If Sia fixes their [price estimation bugs](#cost-estimates-are-wildly-inaccurate), four more variables are known ahead of time: `upload_cost`, `storage_cost`, `download_cost`, and `contract_fee`.
 
+For the rest of the variables, the user can't know their values in advance even if Sia provided 100% accurate price estimates. `storage_efficiency` depends on the distribution of file sizes in the user's data, and how stable their hosts are. Sia can't predict it without looking at the files or knowing when hosts will go offline.
+
+`contract_count` and `contract_renewals` depend on the stability of the hosts and on the user's storage activity. If the user downloads their files frequently, they will generate more contract renewals than a user who uses Sia for cold storage and rarely downloads files. Even if the user knows what their usage pattern will be, they *still* can't predict their number of contracts because of Sia's [opaque and confusing contract purchasing logic](#contract-spending-is-unintuitive).
 
 ### Fees represent a high proportion of cost
 
-Before I ran this test, I assumed Sia's fees were pretty small.
+Before I ran this test, I assumed that fees would be only a small percentage of total costs, like 2-4%. In reality, fees accounted for 28-44% of costs in these tests.
 
-When you use Sia-UI to set a storage allowance, it shows fees as . As explained [above](#cost-estimates-are-wildly-inaccurate), fees are the cost for which Sia makes the poorest predictions. In these tests, fees were 10-20x more than what Sia's price API predicted.
-
-I'm using Sia's 
+As explained [above](#cost-estimates-are-wildly-inaccurate), fees are the cost for which Sia makes the poorest predictions. In these tests, fees were 10-20x more than what Sia's price API predicted.
 
 | Test case | Fee spending (incorrect accounting) | Total spending (incorrect accounting) | Fees as % of total spending |
 |-------------|-----------------|----------------|--------|
@@ -173,15 +180,17 @@ I'm using Sia's
 | [Real data](/load-test-2) | 640.6 SC | 2,243.8 SC | 28.5% |
 | [Best-case](/load-test-3) | 628.6 SC | 1,473.3 SC | 42.7% |
 
+Note that for these numbers, I'm using the raw numbers from the `renter` APIs [even though I think they're incorrect](#cost-estimates-are-wildly-inaccurate). The relevant metric is the percentage of total costs, which remains the same even if I scale all the numbers by a constant factor to reconcile Sia's accounting errors.
+
 ### Fees are variable, not fixed
 
-I thought that contract fees were independent of the value of the contract. With Bitcoin, a 1 BTC transaction costs the same in fees as a 10 BTC transaction. So I assumed that a 500 SC Sia renter allowance would cost the same in fees as a 5000 SC allowance.  This is what both Sia-UI and the `/renter/prices` API claim: you pay the same flat fee regardless of allowance amount. This is not the case.
+I thought that contract fees were independent of the value of the contract.
+
+Using Bitcoin, a 1 BTC transaction costs the same in fees as a 10 BTC transaction. I believed that Sia's contract fees would similarly be the same on a 500 SC Sia renter allowance as a 5000 SC allowance. Both Sia-UI and the `/renter/prices` API make that claim: you pay the same flat fee regardless of allowance amount. This is not true.
 
 Before I began official testing, I did an practice run of my test script [using a 500 SC wallet](https://redd.it/7y3lzg). When I began official testing with a 5000 SC wallet, I was surprised to see Sia spend almost four times the contract fees as my 500 SC test.
 
-As the test progresses, Sia's accounting becomes unreliable (described [above](#cost-accounting-is-unreliable)), but at the very beginning of the renter period when Sia forms its initial set of 50 contracts, its accounting is consistent.
-
-Comparing the 500 SC test to the 5000 SC test, there are clearly big differences, both in absolute fee costs and in fees as percentage of total spending.
+As the test progresses, Sia's accounting [becomes unreliable](#cost-accounting-is-unreliable)), but at contract formation time, Sia's accounting is consistent and credible. Comparing the 500 SC test to the 5000 SC test, there are clearly big differences, both in absolute fees and in fees as percentage of total spending.
 
 | Allowance | Contract fees<br>(contract creation time) | Total contract spending<br>(contract creation time) | Fees as % of contract costs |
 |-----------|-----|-------------|----------------------------|
@@ -190,22 +199,19 @@ Comparing the 500 SC test to the 5000 SC test, there are clearly big differences
 
 ### Contract spending is unintuitive
 
-This test showed me that my mental model of Sia's contract management was incorrect. I thought that Sia purchased 50 contracts for the duration of the contract period (12 weeks, in the load test), and then used these 50 contracts until they funds associated with them were exhausted or the associated hosts went offline.
+This test showed me that my mental model of Sia's contract management was incorrect. I thought that Sia purchased 50 contracts for the duration of the contract period (12 weeks, by default) and then used these 50 contracts until the funds were exhausted or the associated hosts went offline.
 
 This is not how Sia manages contracts. I don't fully understand what Sia's contract logic is, and I don't see the behavior documented anywhere, but I can glean a bit from the test results.
 
-Sia seems to optimize for performance instead of costs. When I set an allowance of 5000 SC, it doesn't spend 5000 SC on contracts. Instead, it spends 1/3 of this on contracts and keeps the remaining 2/3 as reserves to reinvest in contracts that perform well.
+Sia seems to optimize for high upload bandwidth at the expense of higher costs. When I set an allowance of 5000 SC, Sia doesn't spend 5000 SC on contracts. Instead, it spends 1/3 of the allowance on contracts and keeps the remaining 2/3 as reserves to reinvest in hosts that perform well.
 
-When Sia finds a host that performs well, it purchases additional contracts from that host [well before its other contracts are exhausted](https://github.com/NebulousLabs/Sia/issues/2769). Sia represents this as reinvestment, so the contract count doesn't increase, but Sia pays the same amount in fees as if it had purchased a new, separate contract.
+When Sia finds a host with high bandwidth, it purchases additional contracts from that host [well before its other contracts are exhausted](https://github.com/NebulousLabs/Sia/issues/2769). Sia represents this as reinvestment, so the contract count doesn't increase, but Sia pays the same amount in fees as if it had purchased a new, separate contract.
 
 Sia always buys contracts in increments of 1/150th of the allowance. Even if it has reinvested in a contract five times, it keeps reinvesting tiny amounts rather than increasing the spending amount to reduce the percentage lost to fees.
 
-Uploads with too high a redundancy.
+In one of the tests, while Sia had 1,200 SC sitting in unused contract funds, it suddenly [spent its entire wallet balance](https://github.com/NebulousLabs/Sia/issues/2866#issuecomment-373493433) (1,766 SC) on new contracts, even though it already had 1,233 SC sitting in unused contracts.
 
-* Misconception 2: Contract fees are paid once at the start of a contract period and not paid again until the contract completes.
-
-I thought that fees 
-Increase with the amount of data uploaded, increase with the size of the allowance.
+{% include image.html file="sudden-spend.png" alt="Graph of Sia's sudden contract spending in worst-case test" fig_caption="Sia suddenly drains wallet balance on new contracts" img_link="true" %}
 
 ### File replication is bizzare
 
@@ -275,7 +281,7 @@ It turns out that Sia performs much better with a small set of very large files 
 
 ### Increase file sizes for worst-case scenario
 
-To test Sia's performance in its worst-case scenario, I uploaded thousands of 1-byte files. It was interesting to see the results, but the resulting metrics were so extreme to the point that they're basically meaningless.
+To test Sia's performance in its worst-case scenario, I uploaded thousands of 1-byte files. It was interesting to see the results, but the resulting metrics were extreme to the point that they're basically meaningless.
 
 Some readers gave feedback that this test should be ignored entirely and Sia should only be tested with the large files it's currently optimized for. I think that would be a mistake. It would be like reporting the performance characteristics of a car when it's driven at 120 mph. That might be the car's ideal performance speed, but real world users want to know how it performs in real world conditions.
 
