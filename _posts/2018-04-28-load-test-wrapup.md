@@ -101,7 +101,7 @@ Sia also reports spending metrics that are [logically impossible](https://github
 
 ### Cost estimates are wildly inaccurate
 
-Sia offers a [`/renter/prices` API](https://github.com/NebulousLabs/Sia/blob/master/doc/api/Renter.md#json-response-4) that Sia-UI and the command-line client use to provide cost estimates to the user before they  store data on Sia. I found that its estimates drastically underestimated the Sia's costs in practice:
+Sia offers a [`/renter/prices` API](https://github.com/NebulousLabs/Sia/blob/master/doc/api/Renter.md#json-response-4) that Sia-UI and the command-line client use to provide cost estimates to the user before they  store data on Sia. I found that its estimates drastically underestimated Sia's costs in practice:
 
 #### Real data scenario
 
