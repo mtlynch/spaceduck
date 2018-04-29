@@ -205,11 +205,11 @@ This is not how Sia manages contracts. I don't fully understand what Sia's contr
 
 Sia seems to optimize for high upload bandwidth at the expense of higher costs. When the user sets an allowance of 5000 SC, Sia doesn't spend 5000 SC on contracts. Instead, it spends 1/3 of the allowance on contracts and keeps the remaining 2/3 on reserve to reinvest in hosts that perform well.
 
-When Sia finds a host with high bandwidth, it renews contracts with that host [well before its other contracts are exhausted](https://github.com/NebulousLabs/Sia/issues/2769). This is problematic because Sia always renews by the same small, fixed amount, and small renewals result in a higher proportion of fees.
+When Sia finds a host with high bandwidth, it renews contracts with that host [well before its other contracts are exhausted](https://github.com/NebulousLabs/Sia/issues/2769). ~~This is problematic because Sia always renews by the same small, fixed amount, and small renewals result in a higher proportion of fees.~~ **Correction**: Sia actually [doubles the contract size](https://www.reddit.com/r/siacoin/comments/8fo0ba/sia_load_test_wrapup/dy636qy/) each renewal, so only the first two renewals are the same size.
 
 There's a lot about Sia's contract purchasing that I still don't understand. I'm unclear about what causes Sia to purchase a contract with a new host rather than renewing with one of its existing hosts. And I don't know how Sia chooses between spending extra on fast hosts or spending funds already allocated to slower hosts.
 
-Puzzlingly, Sia sometimes renews contracts before the contract's funds are even close to exhaustion. Sia renewed [a contract in one test](https://docs.google.com/spreadsheets/d/1frR3dzoJ5j2ffXO4xLEUl4Guf9dyVkAnbBc5lE1-OJs/edit?usp=sharing) to 133.3 SC in increments of 33.3 SC. By the test's end, that particular contract had 75 SC in funds remaining. This means that Sia purchased 33.3 SC to a contract that had at least 41 SC in remaining, spendable funds.
+Puzzlingly, Sia sometimes renews contracts before the contract's funds are even close to exhaustion. Sia renewed [a contract in one test](https://docs.google.com/spreadsheets/d/1frR3dzoJ5j2ffXO4xLEUl4Guf9dyVkAnbBc5lE1-OJs/edit?usp=sharing) to 133.3 SC ~~in increments of 33.3 SC~~ (**Correction**: doubling twice from a start of 33.3 SC). By the test's end, that particular contract had 75 SC in funds remaining. This means that Sia ~~added 33.3 SC to a contract that had at least 41 SC~~ (**Correction**: added 66.6 to a contract that had at least 8.4 SC) in remaining, spendable funds.
 
 I also observed instances of Sia making large, unexpected contract purchases. In the [worst-case test](/load-test-1), while Sia had 1,200 SC sitting in unused contract funds, it suddenly [spent its entire 1,766 SC wallet balance](https://github.com/NebulousLabs/Sia/issues/2866#issuecomment-373493433) on new contracts, even though it already had 1,233 SC sitting in unused contracts.
 
@@ -352,3 +352,8 @@ Thanks to:
 * The Sia bounty fund for providing the Siacoins used in these tests.
 * Luke Champine, James Muller, Salvador Herrera for their contributions to the test plan.
 * David Vorick for providing feedback about test results.
+
+## Corrections
+
+* Sia developer David Vorick [corrected](https://www.reddit.com/r/siacoin/comments/8fo0ba/sia_load_test_wrapup/dy636qy/) my misunderstanding of Sia's contract renewal strategy. I've updated [that section](#contract-spending-is-unintuitive) with the additional information.
+
