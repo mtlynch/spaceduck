@@ -6,7 +6,7 @@ description: A high-level review of the Sia load test results
 tags:
 - sia
 - load test
-image: "/images/2018-04-19-load-test-wrapup/sudden-spend.png"
+image: "/images/2018-04-28-load-test-wrapup/sudden-spend.png"
 ---
 
 Over the past three months, I performed a series of load tests on Sia. I published reports to describe each test individually, but now I'd like to look back on the tests at a high level to share what I learned about Sia and how to improve testing as the project moves forward.
