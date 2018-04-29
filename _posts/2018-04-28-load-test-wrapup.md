@@ -2,7 +2,7 @@
 title: Sia Load Test Wrap-up
 layout: post
 date: '2018-04-19'
-description: A high-level review of the Sia load test results
+description: A high-level review of the Sia 1.3.1 load test results
 tags:
 - sia
 - load test
