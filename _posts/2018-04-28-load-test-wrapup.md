@@ -250,7 +250,7 @@ Having gone through the testing process end-to-end, I'd like to share my thought
 
 ### Run on cloud servers
 
-I originally designed the tests to run on my home desktop because I wanted to minimize emulation. I was concerned that running the test from a Docker container or VM might introduce unexpected side effects to the test. 
+I originally designed the tests to run on my home desktop because I wanted to minimize emulation. I was concerned that running the test from a Docker container or VM might introduce unexpected side effects to the test.
 
 I also wanted to test Sia with actual data instead of synthetic files, but that presents challenges in a cloud environment. For example, storing 5 TB of test data on Google Cloud Storage would cost $102.40 per month. On top of that, using Google Compute Engine to run would cost ~$100/TB in bandwidth fees.
 
@@ -306,10 +306,10 @@ I tried to automate wherever I could, but it's always difficult to know what nee
 
 By provisioning, I mean:
 
-  * Installing Sia on the test machine
-  * Installing test tools on the test machine
-  * Funding the Sia wallet
-  * Generating dummy data
+* Installing Sia on the test machine
+* Installing test tools on the test machine
+* Funding the Sia wallet
+* Generating dummy data
 
 I performed these steps manually for each test and documented the commands in the [sia_load_tester README](https://github.com/mtlynch/sia_load_tester), but it would be better to capture this logic in a single script or Ansible playbook (using [ansible-role-sia](https://github.com/mtlynch/ansible-role-sia), of course).
 
