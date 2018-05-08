@@ -8,7 +8,6 @@ description: A preview of some neat things you can do with the streaming feature
 tags:
 - sia
 - docker
-image: "/images/2018-05-08-sia-streaming-preview/streaming-preview.png"
 ---
 
 File streaming is the headline feature of Sia's next release. Users will be able to stream files over HTTP, whereas previously they had to fully download their files to disk in order to access them.
@@ -143,21 +142,21 @@ To start streaming, you need to create a Sia wallet and fund it with at least 50
 You then need to create renter contracts. I created contracts through the command below. It's a bit unusual because I'm choosing very short contracts to match my VPS's one-month lifetime.
 
 ```bash
-$ docker exec -it sia ./siac renter setallowance 5KS 30d 50 288b
+docker exec -it sia ./siac renter setallowance 5KS 30d 50 288b
 ```
 
 Next, you'll need to upload files. Any file you place in the `./uploads` directory on your host will appear within your Sia container under the `/sia-uploads` path. Here are the commands I used to upload a few video files:
 
 ```bash
-$ docker exec -it sia ./siac renter upload \
+docker exec -it sia ./siac renter upload \
   /sia-uploads/big_buck_bunny_480p_surround-fix.mp4 \
   /big_buck_bunny_480p_surround-fix.mp4
 
-$ docker exec -it sia ./siac renter upload \
+docker exec -it sia ./siac renter upload \
   /sia-uploads/bbb_sunflower_1080p_60fps_normal.mp4 \
   /bbb_sunflower_1080p_60fps_normal.mp4
 
-$ docker exec -it sia ./siac renter upload \
+docker exec -it sia ./siac renter upload \
   /sia-uploads/bbb_sunflower_2160p_60fps_normal.mp4 \
   /bbb_sunflower_2160p_60fps_normal.mp4
 ```
@@ -165,7 +164,7 @@ $ docker exec -it sia ./siac renter upload \
 I'm keeping the files on the Sia network, so it wouldn't be very exciting if I had to keep all the files locally as well. Once `siac renter -v` showed that my files were 100% uploaded to Sia, I deleted the local copies from my host:
 
 ```bash
-$ rm uploads/*
+rm uploads/*
 ```
 
 # Live demo
@@ -187,14 +186,14 @@ Click one of the "Play" buttons and a video player will pop up below:
 <script>
 var loadVideo = function(source) {
   var vidHolder = document.getElementById("vidHolder");
-	vidHolder.innerHTML = "";
+  vidHolder.innerHTML = "";
   var videlem = document.createElement("video");
-	videlem.controls = "controls";
-	videlem.autoplay = "autoplay";
-	videlem.width = 640;
-	videlem.height = 480;
-	videlem.autoplay = true;
-  var sourceMP4 = document.createElement("source"); 
+  videlem.controls = "controls";
+  videlem.autoplay = "autoplay";
+  videlem.width = 640;
+  videlem.height = 480;
+  videlem.autoplay = true;
+  var sourceMP4 = document.createElement("source");
   sourceMP4.type = "video/mp4";
   sourceMP4.src = source;
   videlem.appendChild(sourceMP4);
