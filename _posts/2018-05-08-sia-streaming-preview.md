@@ -8,6 +8,7 @@ description: A preview of some neat things you can do with the streaming feature
 tags:
 - sia
 - docker
+image: "/images/2018-05-08-sia-streaming-preview/streaming-preview.png"
 ---
 
 File streaming is the headline feature of Sia's next release. Users will be able to stream files over HTTP, whereas previously they had to fully download their files to disk in order to access them.
