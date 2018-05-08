@@ -101,7 +101,7 @@ http {
 }
 ```
 
-This is the coniguration file for nginx. It listens on port 80, the default port for HTTP traffic. When it receives an HTTP request for a path like `/foo/bar.mp4`, it forwards the request to the Sia node and rewrites the path to `http://sia:9980/renter/stream/foo/bar.mp4`, which is Sia's [streaming download endpoint](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renterstreamsiapath-get).
+This is the configuration file for nginx. It listens on port 80, the default port for HTTP traffic. When it receives an HTTP request for a path like `/foo/bar.mp4`, it forwards the request to the Sia node and rewrites the path to `http://sia:9980/renter/stream/foo/bar.mp4`, which is Sia's [streaming download endpoint](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renterstreamsiapath-get).
 
 It's worth noting that Sia runs many endpoints on port 9980, many of which are sensitive APIs that you shouldn't expose publicly. The APIs for sending funds or displaying your wallet seed run on the same port, for example. The configuration above protects the Sia node by only exposing the `/renter/stream` API and keeping every other sensitive endpoint inaccessible externally.
 
