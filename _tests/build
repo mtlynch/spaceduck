@@ -27,6 +27,7 @@ bundle exec htmlproofer ./_site \
   --check-opengraph \
   --allow-hash-href \
   --empty-alt-ignore \
+  --url-ignore "/docs.google.com/" \
   "$htmlproofer_args_extra"
 
 # Build production site.
