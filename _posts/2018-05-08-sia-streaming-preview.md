@@ -61,8 +61,8 @@ mkdir sia-streaming && cd sia-streaming
 mkdir sia-data uploads metrics
 
 # Download the necessary files.
-wget https://gist.githubusercontent.com/mtlynch/ff0b7789bf7d8797cae09646163bee49/raw/8de1b5ee0919dbc5fda8428d6c3713ff60469c1a/docker-compose.yml
-wget https://gist.githubusercontent.com/mtlynch/ff0b7789bf7d8797cae09646163bee49/raw/8de1b5ee0919dbc5fda8428d6c3713ff60469c1a/nginx.conf
+wget https://blog.spaceduck.io/files/sia-streaming-preview/docker-compose.yml
+wget https://blog.spaceduck.io/files/sia-streaming-preview/nginx.conf
 
 # Start the Docker containers
 docker-compose up --detach
