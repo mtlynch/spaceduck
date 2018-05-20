@@ -4,6 +4,11 @@
 .sidebar-bg {
   background-size: contain; 
   background-repeat: no-repeat;
+  background-position-y: 10%;
+
+  @media screen and (min-width: $break-point-3) {
+    background-position-y: center;
+  }
 }
 
 /* Custom Mobile Menu-bar Styles */
@@ -27,6 +32,14 @@
 
 .site-title-2 {
   color: #F9B635;
+}
+
+.sidebar-sticky {
+  bottom: 4rem;
+
+  @media screen and (min-width: $break-point-3) {
+    bottom: 1rem;
+  }
 }
 
 /* Custom Image Styles */
