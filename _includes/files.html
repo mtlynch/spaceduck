@@ -1,0 +1,52 @@
+{% comment %}
+<!--
+  Files Embed Include
+
+  This include file makes it possible to easily embed a file from the
+  "files" collection within a page, post, or layout. The file will be
+  displayed inside a pre block and include a download link underneath.
+
+  @param {string} "title" - the yml meta field for title in the download file
+  @param {string} "language" - the coding language used for syntax highlighting
+
+-->
+{% endcomment %}
+
+{% comment %}
+<!-- determine correct collection based on language param -->
+{% endcomment %}
+{% if include.language == "yml" or include.language == "yaml" %}
+	{% assign files = site.ymls | where: 'title', include.title %}
+{% else %}
+	{% assign files = site.files | where: 'title', include.title %}
+{% endif %}
+
+{% comment %}
+<!-- determine syntax highlighting language.  Defaults to null -->
+{% endcomment %}
+{% assign lang_highlight = "" %}
+{% if include.language %}
+	{% assign lang_highlight = include.language %}
+{% endif %}
+
+{% for file in files %}
+
+  {% comment %}
+  <!-- determine correct collection based on language param -->
+  {% endcomment %}
+  {% assign file_path = file.relative_path  | remove: '_files/'  | remove: '_ymls/' %}
+  {% if include.language == "yml" or include.language == "yaml" %}
+    {% assign file_path = file_path | append: "." | append: include.language %}
+  {% endif %}
+  {% assign link = site.baseurl | append: '/files/' | append: file_path %}
+
+```{{ lang_highlight }}
+{{ file.content -}}
+```
+{:.code-block-tab}
+
+<div class="clearfix full-width">
+  <a href="{{ link }}" download class="btn code-tab">download raw</a>
+</div>
+
+{% endfor %}

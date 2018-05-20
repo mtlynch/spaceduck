@@ -33,45 +33,7 @@ You'll need to download just two files, which I'll explain in turn:
 
 ### docker-compose.yml
 
-```yaml
-services:
-  sia:
-    image: mtlynch/sia:1.3.3-rc1
-    container_name: sia
-    environment:
-      - SIA_MODULES=gctrw
-    restart: on-failure
-    ports:
-      - 9981:9981
-    volumes:
-      - ./sia-data:/sia-data
-      - ./uploads:/sia-uploads
-  nginx:
-    image: nginx
-    container_name: nginx
-    restart: always
-    ports:
-      - 80:80
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    links:
-      - sia
-  # sia-metrics-collector is optional. It will collect Sia metrics for you
-  # in your metrics/ folder. You can delete this section if you don't want it.
-  sia-metrics-collector:
-    image: mtlynch/sia_metrics_collector:2018-05-08
-    container_name: sia-metrics-collector
-    environment:
-      - SIA_HOSTNAME=http://sia
-      - OUTPUT_FILE=/metrics/metrics.csv
-    restart: on-failure
-    volumes:
-      - ./metrics:/metrics
-    depends_on:
-      - sia
-    links:
-      - sia
-```
+{% include files.html title="docker-compose.yml" language="yml" %}
 
 This file tells Docker to set up a network of three containers to support my streaming solution.
 
@@ -83,23 +45,7 @@ Finally, there's the Sia metrics collector. That one is optional and just captur
 
 ### nginx.conf
 
-```text
-events {}
-
-http {
-    upstream sia-backend {
-      server sia:9980;
-    }
-
-    server {
-        listen 80;
-        proxy_read_timeout 600s;
-
-        rewrite ^/(.+)$ /renter/stream/$1 last;
-        location /renter/stream/ { proxy_pass http://sia:9980; }
-    }
-}
-```
+{% include files.html title="nginx.conf" language="text" %}
 
 This is the configuration file for nginx. It listens on port 80, the default port for HTTP traffic. When it receives an HTTP request for a path like `/foo/bar.mp4`, it forwards the request to the Sia node and rewrites the path to `http://sia:9980/renter/stream/foo/bar.mp4`, which is Sia's [streaming download endpoint](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renterstreamsiapath-get).
 
