@@ -3,11 +3,6 @@
 @import "vendor/magnific-popup/main.scss";
 
 /* Subscribe Form Styles */
-pre {
-  width: 100%;
-  margin: 0 auto;
-}
-
 .message-newsletter {
   padding: 1rem;
 
@@ -114,4 +109,35 @@ table:not(.highlight) {
     }
   }
 
+}
+
+/* Code Block Sytles */
+pre {
+  width: 100%;
+  margin: 0 auto;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #f2f3f3;
+}
+
+.code-tab {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #f2f3f3;
+  border-top: 0;
+  border-radius: 0 0 4px 4px;
+  background-color: #fafafa;
+  margin-top: -2.1rem;
+  z-index: 10;
+  position: relative;
+  padding: 0.5em 1em;
+  float: right;
+  color: #268bd2;
+  font-weight: normal;
+  font-size: .75rem;
+  margin-bottom: 2rem
+}
+
+.full-width {
+  width: 100%;
 }

@@ -162,6 +162,14 @@ collections:
     permalink:         /:title/
     output:            true
 
+  files:
+    output: true
+    permalink: /:collection/:path:output_ext
+
+  ymls:
+    output: true
+    permalink: /files/:path.yml
+
 defaults:
   - scope:
       type: posts
