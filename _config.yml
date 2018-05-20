@@ -72,11 +72,11 @@ future:                yes
 # ========================================================================================
 
 # Sidebar image and theme color of the site.
-#accent_image:          /assets/img/sidebar-bg.jpg
-accent_image:
-  background: '#202020'
-  overlay:    false
+accent_image:          /images/Space_Duck_Desktop_RGB_PNG.png
 accent_color:          '#268bd2'
+
+# mobile sticky nav log
+mobile_logo:           /images/Space_Duck_Mobile_2000px.png
 
 # The string encoding which fonts to fetch from Google Fonts.
 # See: <https://qwtel.com/hydejack/docs/configuration/>

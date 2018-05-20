@@ -1,5 +1,34 @@
 // Includes inline theme overrides
 
+/* Custom Logo Styles */
+.sidebar-bg {
+  background-size: contain; 
+  background-repeat: no-repeat;
+}
+
+/* Custom Mobile Menu-bar Styles */
+.nav-btn-bar {
+  margin-left: auto;
+  border-bottom: 2px solid #888;
+
+  @media screen and (min-width: $break-point-3) {
+    border-bottom: none;
+  }
+
+  .nav-btn {
+    padding: 1.55rem .875rem 1.25rem 0;
+  }
+}
+
+/* Custom Sidebar Title Styles */
+.site-title-1 {
+  color: #67BB26;
+}
+
+.site-title-2 {
+  color: #F9B635;
+}
+
 /* Custom Image Styles */
 .content figure img {
   margin-bottom: .25rem;
