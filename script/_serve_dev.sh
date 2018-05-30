@@ -7,4 +7,4 @@ set -e
 npm run build:js
 
 # Start jekyll server
-bundle exec jekyll serve --watch
+bundle exec jekyll serve --watch --port 4001
