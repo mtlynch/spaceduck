@@ -15,3 +15,7 @@ This blog focuses on the technical aspects of these technologies and not the tra
 Michael Lynch is a blogger, developer, and cryptocurrency enthusiast. He began contributing to Sia in 2015 and remains one of its top [third-party contributors](https://github.com/NebulousLabs/Sia/graphs/contributors). He is also one of the least relevant third-party [contributors to Storj](https://github.com/StorjOld/dataserv-client/graphs/contributors).
 
 Before creating Space Duck in 2018, Michael [wrote frequently about Sia](https://mtlynch.io/tags/#sia) on his personal blog.
+
+## Disclosure
+
+Michael Lynch holds no investments in any cryptocurrencies, though he generally keeps a few hundred US dollars' worth of Siacoin on hand for experiments related to this blog. In the interest of preserving the site's honesty and integrity, Michael does not accept payment for any Space Duck content.
